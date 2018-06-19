@@ -1,0 +1,7 @@
+[core]
+    editor = vim
+[push]
+    default = simple
+[user]
+    name = Nelson Earle
+    email = nelson.earle137@gmail.com
