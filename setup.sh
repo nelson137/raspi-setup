@@ -113,7 +113,7 @@ crontabs() {
     local mailto='MAILTO=""'
 
     # User crontab
-    local u_tab='0 5 * * * git -C /home/nelson/Projects/Git/dot pull'
+    local u_tab='0 5 * * * git -C ~nelson/Projects/Git/dot pull'
     echo -e "${comments}\n\n${mailto}\n\n${u_tab}" | crontab -
 
     # Root crontab
@@ -123,6 +123,7 @@ crontabs() {
 }
 
 
+# Generate a new SSH key, replacing the old Github key with the new one
 ssh_key() {
     curl_git() {
         local url="https://api.github.com$1"
