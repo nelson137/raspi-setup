@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dir="$(basename "$0")"
+dir="$(dirname "$0")/files"
 
 
 # Make new user
@@ -109,7 +109,7 @@ crontabs() {
     # Set crontab editor to vim basic
     cp "${dir}/.selected_editor" ~nelson
 
-    local comments="$(cat comments.crontab)"
+    local comments="$(cat "${dir}/comments.crontab")"
     local mailto='MAILTO=""'
 
     # User crontab
