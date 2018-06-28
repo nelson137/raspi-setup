@@ -44,7 +44,7 @@ pkgs() {
 
 # Use hybrid suspend to wake up quicker
 hybrid_suspend() {
-    sudo cp "${dir}/00-use-suspend-hybrid" \
+    sudo cp "${dir}/files/00-use-suspend-hybrid" \
         /etc/pm/config.d/00-use-suspend-hybrid
 }
 
@@ -73,7 +73,7 @@ ssh_motd() {
         sudo sed -ri "$header_regex" /etc/update-motd.d/00-header
 
     # Create 01-pretty-header script
-    sudo cp ./01-pretty-header /etc/update-motd.d/
+    sudo cp "${dir}/files/01-pretty-header" /etc/update-motd.d/
 }
 
 
@@ -111,9 +111,9 @@ ssh_key() {
 # User and root crontabs
 crontabs() {
     # Set crontab editor to vim basic
-    cp "${dir}/../common-setup/.selected_editor" ~nelson
+    cp "${dir}/files/.selected_editor" ~nelson
 
-    local comments="$(cat "${dir}/../common-setup/comments.crontab")"
+    local comments="$(cat "${dir}/files/comments.crontab")"
     local mailto='MAILTO=""'
 
     # User crontab
@@ -135,7 +135,7 @@ user() {
     git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
 
     # Git
-    cp "${dir}/../common-setup/.gitconfig" ~nelson
+    cp "${dir}/files/.gitconfig" ~nelson
 
     # oh-my-zsh
     local url='https://github.com/robbyrussell/oh-my-zsh.git'
