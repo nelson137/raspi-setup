@@ -35,9 +35,9 @@ pkgs() {
     # Installations
     install() { sudo apt install -y "$@"; }
     install apache2 boxes build-essential cmake dnsutils figlet git \
-        html-xml-utils lolcat nextcloud-client nodejs openssh-server
-        python3-flask python3-pip python3-tk shellinabox solaar upower vim w3m
-        zsh
+        html-xml-utils libsecret-tools lolcat nextcloud-client nodejs \
+        openssh-server python3-flask python3-pip python3-tk shellinabox \
+        solaar tmux upower vim w3m zsh
 
     # youtube-dl
     # Don't install from repositories because they are behind
@@ -128,7 +128,7 @@ ssh_key() {
     curl_git() {
         local url="https://api.github.com$1"
         shift
-        curl -sSLiu "nelson137:$(cat password)" "$@" "$url"
+        curl -sSLu "nelson137:$(cat password)" "$@" "$url"
     }
 
     # Generate SSH key
@@ -145,7 +145,7 @@ ssh_key() {
     local ssh_key="$(cat ~nelson/.ssh/id_rsa.pub)"
     for id in "${key_ids[@]}"; do
         local json="$(curl_git "/user/keys/$id" | awk '/^\{/,/^\}/')"
-        if [[ $(echo "$json" | jq '.title' | tr -d '"') == Pi ]]; then
+        if [[ $(echo "$json" | jq -r '.title') == Pi ]]; then
             curl_git "/user/keys/$id" -X DELETE
             curl_git '/user/keys' -d '{ "title": "Pi", "key": "'"$ssh_key"'" }'
             break
