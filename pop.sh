@@ -105,14 +105,14 @@ crontabs() {
 }
 
 
-# 
+# Setup user directory
 user() {
-    # User directory
+    # File structure
     mkdir -p ~nelson/{Downloads,Projects/Git}
     chown -R nelson:nelson ~nelson
     git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
 
-    # Git
+    # git
     cp "${dir}/files/.gitconfig" ~nelson/
 
     # oh-my-zsh
