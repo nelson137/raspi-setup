@@ -104,7 +104,7 @@ system() {
     local n="$(cat /etc/apache2/ports.conf | grep -n Listen | cut -d: -f1)"
     ((n++))
     sudo sed -i "${n}i Listen 6184"
-    sudo cp "${dir}/shellinabox.conf" /etc/apache2/sites-available
+    sudo cp "${dir}/shellinabox.conf" /etc/apache2/sites-available/
     sudo a2enmod proxy proxy_http
     sudo a2ensite shellinabox.conf
     sudo systemctl restart apache2.service
@@ -134,11 +134,11 @@ crontabs() {
 user() {
     # User directory
     mkdir -p ~nelson/{Downloads,Projects/Git}
-    chown -R nelson:nelson ~nelson
+    chown -R nelson:nelson ~nelson/
     git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
 
     # Git
-    cp "${dir}/.gitconfig" ~nelson
+    cp "${dir}/.gitconfig" ~nelson/
 
     # oh-my-zsh
     local url='https://github.com/robbyrussell/oh-my-zsh.git'
