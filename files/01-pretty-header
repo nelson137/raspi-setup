@@ -34,7 +34,8 @@ d888888888b 888 d88888888b     $(echo "$info" | sed -n '6{p;q}')
       \`\"\` O88888O \`\"\`
    jgs     'Y8P'
              '
-     by: Joan G. Stark"
+     by: Joan G. Stark
+"
 
 # Pad each line with trailing spaces so that they are the same length
 longest="$(echo "$ssh_header" | awk '{print length}' | sort -n | tail -1)"
