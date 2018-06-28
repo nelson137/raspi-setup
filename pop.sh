@@ -52,12 +52,7 @@ hybrid_suspend() {
 # Don't suspend while ssh connections are open
 # https://askubuntu.com/questions/521620
 ssh_keep_awake() {
-    cd /etc/pm/sleep.d
-    sed -r 's/^\s{8}//' | sudo tee 05_ssh-keep-awake <<'    EOF'
-        #!/bin/sh
-
-        who | grep -qv :0 && exit 1
-    EOF
+    sudo cp "${dir}/files/05_ssh-keep-awake" /etc/pm/sleep.d
     sudo chmod +x /etc/pm/sleep.d/05_ssh-keep-awake
 }
 
