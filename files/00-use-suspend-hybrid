@@ -1,0 +1,8 @@
+#!/bin/sh
+
+if [ "$METHOD" = "suspend" ]; then
+    METHOD=hibernate
+    HIBERNATE_MODE=suspend
+fi
+
+SLEEP_MODULE=kernel
