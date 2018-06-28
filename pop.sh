@@ -44,8 +44,7 @@ pkgs() {
 
 # Use hybrid suspend to wake up quicker
 hybrid_suspend() {
-    sudo cp "${dir}/files/00-use-suspend-hybrid" \
-        /etc/pm/config.d/00-use-suspend-hybrid
+    sudo cp "${dir}/files/00-use-suspend-hybrid" /etc/pm/config.d/
 }
 
 
@@ -75,7 +74,7 @@ ssh_motd() {
 # User and root crontabs
 crontabs() {
     # Set crontab editor to vim basic
-    cp "${dir}/files/.selected_editor" ~nelson
+    cp "${dir}/files/.selected_editor" ~nelson/
 
     local comments="$(cat "${dir}/files/comments.crontab")"
     local mailto="MAILTO=''"
@@ -85,7 +84,7 @@ crontabs() {
     echo -e "${comments}\n\n${mailto}\n\n${u_tab}" | crontab -
 
     # Root crontab
-    sudo cp "${dir}/files/weather.sh" /root
+    sudo cp "${dir}/files/weather.sh" /root/
     sudo chmod +x /root/weather.sh
     local p="'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'"
     local r_tab='*/10 * * * * /root/weather.sh'
@@ -101,7 +100,7 @@ user() {
     git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
 
     # Git
-    cp "${dir}/files/.gitconfig" ~nelson
+    cp "${dir}/files/.gitconfig" ~nelson/
 
     # oh-my-zsh
     local url='https://github.com/robbyrussell/oh-my-zsh.git'
