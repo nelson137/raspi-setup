@@ -73,7 +73,6 @@ ssh_motd() {
     sudo cat /etc/update-motd.d/00-header | grep '%s' | grep -q '\nWelcome' ||
         sudo sed -ri "$header_regex" /etc/update-motd.d/00-header
 
-    # Create 01-pretty-header script
     sudo cp "${dir}/files/01-pretty-header" /etc/update-motd.d/
 }
 
