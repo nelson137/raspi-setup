@@ -77,37 +77,6 @@ ssh_motd() {
 }
 
 
-# Generate a new SSH key, replacing the old Github key with the new one
-ssh_key() {
-    curl_git() {
-        local url="https://api.github.com$1"
-        shift
-        curl -sSLiu "nelson137:$(cat password)" "$@" "$url"
-    }
-
-    # Generate SSH key
-    yes y | ssh-keygen -t rsa -b 4096 -C 'nelson.earle137@gmail.com' \
-        -f ~nelson/.ssh/id_rsa -N ''
-
-    # For each ssh key
-    # - get more data about the key
-    # - if the key's title is Pi
-    #   - delete it and upload the new one
-    local -a key_ids=(
-        $(curl_git '/users/nelson137/keys' | awk '/^\[/,/^\]/' | jq '.[].id')
-    )
-    local ssh_key="$(cat ~nelson/.ssh/id_rsa.pub)"
-    for id in "${key_ids[@]}"; do
-        local json="$(curl_git "/user/keys/$id" | awk '/^\{/,/^\}/')"
-        if [[ $(echo "$json" | jq -r '.title') == Pi ]]; then
-            curl_git "/user/keys/$id" -X DELETE
-            curl_git '/user/keys' -d '{ "title": "Pi", "key": "'"$ssh_key"'" }'
-            break
-        fi
-    done
-}
-
-
 # User and root crontabs
 crontabs() {
     # Set crontab editor to vim basic
@@ -155,10 +124,41 @@ user() {
 }
 
 
+# Generate a new SSH key, replacing the old Github key with the new one
+git_ssh_key() {
+    curl_git() {
+        local url="https://api.github.com$1"
+        shift
+        curl -sSLiu "nelson137:$(cat password)" "$@" "$url"
+    }
+
+    # Generate SSH key
+    yes y | ssh-keygen -t rsa -b 4096 -C 'nelson.earle137@gmail.com' \
+        -f ~nelson/.ssh/id_rsa -N ''
+
+    # For each ssh key
+    # - get more data about the key
+    # - if the key's title is Pi
+    #   - delete it and upload the new one
+    local -a key_ids=(
+        $(curl_git '/users/nelson137/keys' | awk '/^\[/,/^\]/' | jq '.[].id')
+    )
+    local ssh_key="$(cat ~nelson/.ssh/id_rsa.pub)"
+    for id in "${key_ids[@]}"; do
+        local json="$(curl_git "/user/keys/$id" | awk '/^\{/,/^\}/')"
+        if [[ $(echo "$json" | jq -r '.title') == Pi ]]; then
+            curl_git "/user/keys/$id" -X DELETE
+            curl_git '/user/keys' -d '{ "title": "Pi", "key": "'"$ssh_key"'" }'
+            break
+        fi
+    done
+}
+
+
 pkgs
 hybrid_suspend
 ssh_keep_awake
 ssh_motd
-ssh_key
 crontabs
 user
+git_ssh_key
