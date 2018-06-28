@@ -49,6 +49,13 @@ pkgs() {
 }
 
 
+# Use gsettings to set power settings
+power_settings() {
+    gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 1800
+    gsettings set org.gnome.desktop.session idle-delay 900
+}
+
+
 # Use hybrid suspend to wake up quicker
 hybrid_suspend() {
     sudo cp "${dir}/files/00-use-suspend-hybrid" /etc/pm/config.d/
@@ -157,6 +164,7 @@ git_ssh_key() {
 
 cache_passwds
 pkgs
+power_settings
 hybrid_suspend
 ssh_keep_awake
 ssh_motd
