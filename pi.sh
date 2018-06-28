@@ -114,19 +114,21 @@ system() {
 # User and root crontabs
 crontabs() {
     # Set crontab editor to vim basic
-    cp "${dir}/.selected_editor" ~nelson
+    cp "${dir}/files/.selected_editor" ~nelson/
 
     local comments="$(cat "${dir}/files/comments.crontab")"
-    local mailto='MAILTO=""'
+    local mailto="MAILTO=''"
 
     # User crontab
     local u_tab='0 5 * * * git -C ~nelson/Projects/Git/dot pull'
     echo -e "${comments}\n\n${mailto}\n\n${u_tab}" | crontab -
 
     # Root crontab
-    # local p='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-    # local r_tab=''
-    # echo -e "${comments}\n\nPATH='${p}'\n${mailto}\n\n${r_tab}" | sudo crontab -
+    sudo cp "${dir}/files/weather.sh" /root/
+    sudo chmod +x /root/weather.sh
+    local p="'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'"
+    local r_tab='*/10 * * * * /root/weather.sh'
+    echo -e "${comments}\n\nPATH=${p}\n${mailto}\n\n${r_tab}" | sudo crontab -
 }
 
 
