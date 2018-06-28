@@ -142,7 +142,7 @@ user() {
 
     # oh-my-zsh
     local url='https://github.com/robbyrussell/oh-my-zsh.git'
-    git --depth=1 "$url" ~nelson/.oh-my-zsh
+    git clone --depth=1 "$url" ~nelson/.oh-my-zsh
     sudo chsh -s /usr/bin/zsh nelson
 }
 
