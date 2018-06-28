@@ -3,6 +3,13 @@
 dir="$(dirname "$0")/files"
 
 
+# Cache passwords
+cache_passwds() {
+    sudo echo >/dev/null
+    read -rp 'Github password: ' GITHUB_PASSWD
+}
+
+
 # Make new user
 mk_user() {
     sudo useradd nelson -mc 'Nelson Earle' -UG pi,adm,sudo,users
@@ -145,7 +152,7 @@ git_ssh_key() {
     curl_git() {
         local url="https://api.github.com$1"
         shift
-        curl -sSLu "nelson137:$(cat password)" "$@" "$url"
+        curl -sSLiu "nelson137:$GITHUB_PASSWD" "$@" "$url"
     }
 
     # Generate SSH key
@@ -171,6 +178,7 @@ git_ssh_key() {
 }
 
 
+cache_passwds
 mk_user
 set_passwds
 pkgs
