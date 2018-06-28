@@ -8,7 +8,7 @@ int_ip="External IP: $(curl -s https://icanhazip.com)"
 time="Time.......: $(date +%r)"
 date="Date.......: $(date +"%a, %b %e, %Y")"
 w_url='http://rss.accuweather.com/rss/liveweather_rss.asp?metric=2&locCode=NAM|US|MO|LAKE%20SAINT%20LOUIS'
-w_sed='/Currently:/ s/.*: (.*): ([0-9]+)F.*/\2°F, \1/p'
+w_sed='/Currently:/ s/.*: (.*): ([0-9]+)F.*/\2F, \1/p'
 weather="Weather....: $(curl -s "$w_url" | sed -rn "$w_sed")"
 
 in_box="${hostname}\n${int_ip}\n${ext_ip}\n${time}\n${date}\n${weather}"
