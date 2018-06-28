@@ -121,9 +121,11 @@ crontabs() {
     echo -e "${comments}\n\n${mailto}\n\n${u_tab}" | crontab -
 
     # Root crontab
-    # local p='/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
-    # local r_tab=''
-    # echo -e "${comments}\n\nPATH='${p}'\n${mailto}\n\n${r_tab}" | sudo crontab -
+    sudo cp "${dir}/files/weather.sh" /root
+    sudo chmod +x /root/weather.sh
+    local p="'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'"
+    local r_tab='*/10 * * * * /root/weather.sh'
+    echo -e "${comments}\n\nPATH=${p}\n${mailto}\n\n${r_tab}" | sudo crontab -
 }
 
 
