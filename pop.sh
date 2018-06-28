@@ -3,6 +3,13 @@
 dir="$(dirname "$0")"
 
 
+# Cache passwords
+cache_passwds() {
+    sudo echo >/dev/null
+    read -rp 'Github password: ' GITHUB_PASSWD
+}
+
+
 # Update, upgrade, and install packages
 pkgs() {
     # PPAs
@@ -123,7 +130,7 @@ git_ssh_key() {
     curl_git() {
         local url="https://api.github.com$1"
         shift
-        curl -sSLiu "nelson137:$(cat password)" "$@" "$url"
+        curl -sSLiu "nelson137:$GITHUB_PASSWD" "$@" "$url"
     }
 
     # Generate SSH key
@@ -149,6 +156,7 @@ git_ssh_key() {
 }
 
 
+cache_passwds
 pkgs
 hybrid_suspend
 ssh_keep_awake
