@@ -153,12 +153,12 @@ git_ssh_key() {
     local ssh_key="$(cat ~nelson/.ssh/id_rsa.pub)"
     for id in "${key_ids[@]}"; do
         local json="$(curl_git "/user/keys/$id" | awk '/^\{/,/^\}/')"
-        if [[ $(echo "$json" | jq -r '.title') == Pi ]]; then
+        if [[ $(echo "$json" | jq -r '.title') == Pop ]]; then
             curl_git "/user/keys/$id" -X DELETE
             break
         fi
     done
-    curl_git '/user/keys' -d '{ "title": "Pi", "key": "'"$ssh_key"'" }'
+    curl_git '/user/keys' -d '{ "title": "Pop", "key": "'"$ssh_key"'" }'
 }
 
 
