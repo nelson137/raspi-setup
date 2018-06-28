@@ -75,10 +75,8 @@ ssh_motd() {
     # Disable motd-news in config file
     sudo sed -i '/^ENABLED/ s/1/0/' /etc/default/motd-news
 
-    # Add extra newline before and after Welcome line
-    header_regex='s:(Welcome to %s \(%s %s %s\)):\\n\1\\n:'
-    sudo cat /etc/update-motd.d/00-header | grep '%s' | grep -q '\nWelcome' ||
-        sudo sed -ri "$header_regex" /etc/update-motd.d/00-header
+    # Disable welcome message
+    sudo sed -ri 's/^(printf)/# \1/' /etc/update-motd.d/00-header
 
     sudo cp "${dir}/files/01-pretty-header" /etc/update-motd.d/
 }
