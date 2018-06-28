@@ -149,10 +149,10 @@ git_ssh_key() {
         local json="$(curl_git "/user/keys/$id" | awk '/^\{/,/^\}/')"
         if [[ $(echo "$json" | jq -r '.title') == Pi ]]; then
             curl_git "/user/keys/$id" -X DELETE
-            curl_git '/user/keys' -d '{ "title": "Pi", "key": "'"$ssh_key"'" }'
             break
         fi
     done
+    curl_git '/user/keys' -d '{ "title": "Pi", "key": "'"$ssh_key"'" }'
 }
 
 
