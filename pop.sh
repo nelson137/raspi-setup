@@ -49,7 +49,7 @@ hybrid_suspend() {
 
 
 # Don't suspend while ssh connections are open
-# https://askubuntu.com/questions/521620
+# https://bbs.archlinux.org/viewtopic.php?id=176876
 ssh_keep_awake() {
     sudo cp "${dir}/files/ssh-keep-awake.service" /etc/systemd/system/
     sudo systemctl enable ssh-keep-awake.service
