@@ -114,7 +114,7 @@ crontabs() {
     cp "${dir}/files/.selected_editor" ~nelson
 
     local comments="$(cat "${dir}/files/comments.crontab")"
-    local mailto='MAILTO=""'
+    local mailto="MAILTO=''"
 
     # User crontab
     local u_tab='0 5 * * * git -C ~nelson/Projects/Git/dot pull'
