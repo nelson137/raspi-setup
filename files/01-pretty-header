@@ -1,4 +1,18 @@
-#!/bin/sh
+#!/bin/bash
+
+unify_len() {
+    local stdin="$(cat /dev/stdin)"
+
+    # Pad each line with trailing spaces so that they are the same length
+    local longest="$(echo "$stdin" | awk '{print length}' | sort -n | tail -1)"
+    local len spaces
+    echo "$stdin" | while IFS= read -r line; do
+        len="$(echo "$line" | awk '{print length}')"
+        spaces="$(printf "%$((longest-len))s")"
+        echo "${line}${spaces}"
+    done
+}
+
 
 hostname="Hostname...: $(hostname)"
 ext_ip="Internal IP: $(ip route get 1 |
@@ -11,41 +25,48 @@ w_url='http://rss.accuweather.com/rss/liveweather_rss.asp?metric=2&locCode=NAM|U
 w_sed='/Currently:/ s/.*: (.*): ([0-9]+)F.*/\2F, \1/p'
 weather="Weather....: $(curl -s "$w_url" | sed -rn "$w_sed")"
 
-in_box="${hostname}\n${int_ip}\n${ext_ip}\n${time}\n${date}\n${weather}"
-info="$(echo "$in_box" | boxes -d parchment -p h2)"
 
-ssh_header="
+fleur_de_lis_str="$(cat <<'EOF'
+
              8
            .d8b.
        _.d8888888b._
      .88888888888888b.
     d88888888888888888b
-    8888888888888888888        $(echo "$info" | sed -n '1{p;q}')
-    Y88888888888888888P        $(echo "$info" | sed -n '2{p;q}')
-     'Y8888888888888P'         $(echo "$info" | sed -n '3{p;q}')
-   _..._ 'Y88888P' _..._       $(echo "$info" | sed -n '4{p;q}')
- .d88889b. Y888P .d88888b.     $(echo "$info" | sed -n '5{p;q}')
-d888888888b 888 d88888888b     $(echo "$info" | sed -n '6{p;q}')
-888P  \`Y8888888888P'  Y888     $(echo "$info" | sed -n '7{p;q}')
- b8b    Y88888888P    d8Y      $(echo "$info" | sed -n '8{p;q}')
-  \`\"'  #############  '\"\`      $(echo "$info" | sed -n '9{p;q}')
-         dP d8b Yb             $(echo "$info" | sed -n '10{p;q}')
+    8888888888888888888
+    Y88888888888888888P
+     'Y8888888888888P'
+   _..._ 'Y88888P' _..._
+ .d88889b. Y888P .d88888b.
+d888888888b 888 d88888888b
+888P  `Y8888888888P'  Y888
+ b8b    Y88888888P    d8Y
+  `"'  #############  '"`
+         dP d8b Yb
      Ob=dP d888b Yb=dO
-      \`\"\` O88888O \`\"\`
+      `"` O88888O `"`
    jgs     'Y8P'
              '
      by: Joan G. Stark
-"
 
-# Pad each line with trailing spaces so that they are the same length
-longest="$(echo "$ssh_header" | awk '{print length}' | sort -n | tail -1)"
-ssh_header="$(
-    echo "$ssh_header" | while IFS= read -r line; do
-        len="$(echo "$line" | awk '{print length}')"
-        spaces="$(printf "%$((longest-len))s")"
-        echo "${line}${spaces}"
-    done
+EOF
 )"
 
-# Center ssh_header horizontally and give it color
-echo "$ssh_header" | figlet -ctf term | /usr/games/lolcat -f
+fleur_de_lis=()
+while IFS= read -r line; do
+    fleur_de_lis+=( "$line" )
+done < <(unify_len <<< "$fleur_de_lis_str")
+
+
+in_box="${hostname}\n${int_ip}\n${ext_ip}\n${time}\n${date}\n${weather}"
+box="\n\n\n\n\n$(echo -e "$in_box" | boxes -d parchment -p h2)"
+info=()
+while IFS= read -r line; do
+    info+=( "$line" )
+done < <(echo -e "$box" | unify_len)
+
+
+# Zip fleur_de_lis and box, center it, and give it color
+for ((i=0; i<${#fleur_de_lis[@]}; i++)); do
+    echo "${fleur_de_lis[i]}     ${info[i]}"
+done | unify_len | figlet -ctf term | /usr/games/lolcat -f
