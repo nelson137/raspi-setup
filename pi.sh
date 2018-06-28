@@ -123,7 +123,7 @@ crontabs() {
 }
 
 
-# Generate a new SSH key, replacing the old Github key with the new one
+# Generate a new SSH key, replace the old Github key with the new one
 ssh_key() {
     curl_git() {
         local url="https://api.github.com$1"
