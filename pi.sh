@@ -61,7 +61,7 @@ system() {
 
     # Keyboard layout
     # - Sets keyboard layout to 
-    sudo cp "${dir}/keyboard" /etc/default/keyboard
+    sudo cp "${dir}/files/keyboard" /etc/default/keyboard
 
     # Don't autologin
     # - Comments out autologin-user= in /etc/lightdm/lightdm.conf
@@ -116,7 +116,7 @@ crontabs() {
     # Set crontab editor to vim basic
     cp "${dir}/.selected_editor" ~nelson
 
-    local comments="$(cat "${dir}/comments.crontab")"
+    local comments="$(cat "${dir}/files/comments.crontab")"
     local mailto='MAILTO=""'
 
     # User crontab
