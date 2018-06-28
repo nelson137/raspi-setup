@@ -1,0 +1,10 @@
+[Unit]
+Description = Prevent suspend when there are ssh connections
+Before = sleep.target
+
+[Install]
+RequiredBy = sleep.target
+
+[Service]
+Type = oneshot
+ExecStart = /bin/sh -c "! who | grep -qv '(:0)'"
