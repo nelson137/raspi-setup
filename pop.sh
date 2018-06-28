@@ -157,5 +157,6 @@ pkgs
 hybrid_suspend
 ssh_keep_awake
 ssh_motd
+ssh_key
 crontabs
 user
