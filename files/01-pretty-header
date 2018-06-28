@@ -49,6 +49,3 @@ ssh_header="$(
 
 # Center ssh_header horizontally and give it color
 echo "$ssh_header" | figlet -ctf term | /usr/games/lolcat -f
-
-# unset -v hostname int_ip ext_ip time date w_url w_sed
-# unset -v weather in_box info ssh_header longest
