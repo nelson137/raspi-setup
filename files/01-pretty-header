@@ -58,6 +58,7 @@ while IFS= read -r line; do
 done < <(unify_len <<< "$fleur_de_lis_str")
 
 
+# Draw ascii art box around info
 in_box="${hostname}\n${int_ip}\n${ext_ip}\n${time}\n${date}\n${weather}"
 box="\n\n\n\n\n$(echo -e "$in_box" | boxes -d parchment -p h2)"
 info=()
