@@ -67,7 +67,11 @@ while IFS= read -r line; do
 done < <(echo -e "$box" | unify_len)
 
 
+# Pick random seed for lolcat
+seeds=( 39 49 60 )
+s="${seeds[$((RANDOM % 3))]}"
+
 # Zip fleur_de_lis and box, center it, and give it color
 for ((i=0; i<${#fleur_de_lis[@]}; i++)); do
     echo "${fleur_de_lis[i]}     ${info[i]}"
-done | unify_len | figlet -ctf term | /usr/games/lolcat -f
+done | unify_len | figlet -ctf term | /usr/games/lolcat -fS "$s"
