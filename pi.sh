@@ -123,8 +123,25 @@ crontabs() {
 }
 
 
+# User directory and environment
+user() {
+    # User directory
+    mkdir -p ~nelson/{Downloads,Projects/Git}
+    chown -R nelson:nelson ~nelson
+    git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
+
+    # Git
+    cp "${dir}/.gitconfig" ~nelson
+
+    # oh-my-zsh
+    local url='https://github.com/robbyrussell/oh-my-zsh.git'
+    git --depth=1 "$url" ~nelson/.oh-my-zsh
+    sudo chsh -s /usr/bin/zsh nelson
+}
+
+
 # Generate a new SSH key, replace the old Github key with the new one
-ssh_key() {
+git_ssh_key() {
     curl_git() {
         local url="https://api.github.com$1"
         shift
@@ -154,27 +171,10 @@ ssh_key() {
 }
 
 
-# User directory and environment
-user() {
-    # User directory
-    mkdir -p ~nelson/{Downloads,Projects/Git}
-    chown -R nelson:nelson ~nelson
-    git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
-
-    # Git
-    cp "${dir}/.gitconfig" ~nelson
-
-    # oh-my-zsh
-    local url='https://github.com/robbyrussell/oh-my-zsh.git'
-    git --depth=1 "$url" ~nelson/.oh-my-zsh
-    sudo chsh -s /usr/bin/zsh nelson
-}
-
-
 mk_user
 set_passwds
 pkgs
 system
 crontabs
-ssh_key
+git_ssh_key
 user
