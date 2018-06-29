@@ -51,6 +51,8 @@ pkgs() {
 
 # Use gsettings to set power settings
 power_settings() {
+    # - Set the timeout to suspend when inactive
+    # - Set the timeout to make the screen blank when inactive
     gsettings set org.gnome.settings-daemon.plugins.power sleep-inactive-battery-timeout 1800
     gsettings set org.gnome.desktop.session idle-delay 900
 }
@@ -113,12 +115,15 @@ user() {
     # git
     cp "${dir}/files/.gitconfig" ~nelson/
 
-    # oh-my-zsh
+    # Oh My Zsh
     local url='https://github.com/robbyrussell/oh-my-zsh.git'
     git clone --depth=1 "$url" ~nelson/.oh-my-zsh
     sudo chsh -s /usr/bin/zsh nelson
 
     # Tor
+    # - Download Tor from Github
+    # - Extract it
+    # - Register Tor as an application
     local url='https://github.com/TheTorProject/gettorbrowser/releases'
     local v="$(curl "${url}/latest" 2>/dev/null | grep -Eo 'v[^"]+')"
     local fn="tor-browser-linux64-$(echo "$v" | tr -d v)_en-US.tar.xz"
@@ -132,6 +137,7 @@ user() {
 # Generate a new SSH key, replace the old Github key with the new one
 git_ssh_key() {
     curl_git() {
+        # Query Github API
         local url="https://api.github.com$1"
         shift
         curl -sSLiu "nelson137:$GITHUB_PASSWD" "$@" "$url"
@@ -142,9 +148,9 @@ git_ssh_key() {
         -f ~nelson/.ssh/id_rsa -N ''
 
     # For each ssh key
-    # - get more data about the key
-    # - if the key's title is Pi
-    #   - delete it and upload the new one
+    # - Get more data about the key
+    # - If the key's title is Pi
+    #   - Delete it and upload the new one
     local -a key_ids=(
         $(curl_git '/users/nelson137/keys' | awk '/^\[/,/^\]/' | jq '.[].id')
     )

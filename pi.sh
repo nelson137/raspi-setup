@@ -64,21 +64,21 @@ system() {
     sudo cp "${dir}/files/keyboard" /etc/default/keyboard
 
     # Don't autologin
-    # - Comments out autologin-user= in /etc/lightdm/lightdm.conf
+    # - Comment out autologin-user= in /etc/lightdm/lightdm.conf
     sudo sed -ri 's/^(autologin-user=)/#\1/' /etc/lightdm/lightdm.conf
 
     # Turn off bluetooth on boot
-    # - Adds rfkill block command to rc.local to disable bluetooth on boot
+    # - Add rfkill block bluetooth to rc.local
     [[ ! -f /etc/rc.local ]] &&
        echo -e "#!/bin/bash\n\nexit 0" | sudo tee /etc/rc.local >/dev/null
     local line_n="$(sudo cat /etc/rc.local | grep -n exit | cut -d: -f1)"
     sudo sed -i "${line_n}i rfkill block bluetooth\n" /etc/rc.local
 
     # Shellinabox
-    # - Adds --disable-ssl and --localhost-only to SHELLINABOX_ARGS
-    # - Makes shellinabox css file names more standardized
-    # - Enables white-on-black (fg-on-bg) and color-terminal
-    # - Restarts shellinabox service
+    # - Add --disable-ssl and --localhost-only to SHELLINABOX_ARGS
+    # - Make shellinabox css file names more standardized
+    # - Enable white-on-black (fg-on-bg) and color-terminal
+    # - Restart shellinabox service
     local old_cwd="$(pwd)"
     local siab_args='--no-beep --disable-ssl --localhost-only'
     sudo sed -i "s/--no-beep/${siab_args}/" /etc/default/shellinabox
@@ -96,11 +96,11 @@ system() {
     cd "$old_cwd"
 
     # Apache2
-    # - Adds another Listen command, below the first one, in ports.conf 
-    # - Copies shellinabox.conf into /etc/apache2/sites-available
-    # - Enables the proxy and proxy_http modules
-    # - Enables shellinabox.conf
-    # - Restarts the apache2 service
+    # - Add another Listen command (below the first one) in ports.conf
+    # - Copy shellinabox.conf to /etc/apache2/sites-available/
+    # - Enable the proxy and proxy_http modules
+    # - Enable shellinabox.conf
+    # - Restart the apache2 service
     local n="$(cat /etc/apache2/ports.conf | grep -n Listen | cut -d: -f1)"
     ((n++))
     sudo sed -i "${n}i Listen 6184"
@@ -142,7 +142,7 @@ user() {
     # Git
     cp "${dir}/.gitconfig" ~nelson/
 
-    # oh-my-zsh
+    # Oh My Zsh
     local url='https://github.com/robbyrussell/oh-my-zsh.git'
     git clone --depth=1 "$url" ~nelson/.oh-my-zsh
     sudo chsh -s /usr/bin/zsh nelson
@@ -152,6 +152,7 @@ user() {
 # Generate a new SSH key, replace the old Github key with the new one
 git_ssh_key() {
     curl_git() {
+        # Query Github API
         local url="https://api.github.com$1"
         shift
         curl -sSLiu "nelson137:$GITHUB_PASSWD" "$@" "$url"
@@ -162,9 +163,9 @@ git_ssh_key() {
         -f ~nelson/.ssh/id_rsa -N ''
 
     # For each ssh key
-    # - get more data about the key
-    # - if the key's title is Pi
-    #   - delete it and upload the new one
+    # - Get more data about the key
+    # - If the key's title is Pi
+    #   - Delete it and upload the new one
     local -a key_ids=(
         $(curl_git '/users/nelson137/keys' | awk '/^\[/,/^\]/' | jq '.[].id')
     )
