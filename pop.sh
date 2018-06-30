@@ -95,6 +95,10 @@ ssh_motd() {
 
     # Apply /etc/update-motd.d changes
     sudo run-parts /etc/update-motd.d/
+
+    # Disable last login message
+    sudo sed -ri 's/^\s*#?\s*(PrintLastLog).*$/\1 no/' /etc/ssh/sshd_config
+    sudo systemctl restart sshd.service
 }
 
 
