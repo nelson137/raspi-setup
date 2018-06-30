@@ -109,7 +109,6 @@ crontabs() {
 user() {
     # File structure
     mkdir -p ~nelson/{Downloads,Projects/Git}
-    chown -R nelson:nelson ~nelson
     git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
 
     # git
