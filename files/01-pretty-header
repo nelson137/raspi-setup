@@ -45,6 +45,7 @@ while IFS= read -r line; do
 done < <(unify_len <<< "$fleur_de_lis_str")
 
 
+distro="Distro.....: $(lsb_release -s -d)"
 hostname="Hostname...: $(hostname)"
 ext_ip="Internal IP: $(ip route get 1 |
                        grep -oE '192\.168(\.[0-9]{1,3}){2}' |
@@ -56,7 +57,8 @@ weather="Weather....: $(cat /etc/update-motd.d/pretty-header-weather.txt)"
 
 
 # Draw ascii art box around info
-in_box="${hostname}
+in_box="${distro}
+${hostname}
 ${int_ip}
 ${ext_ip}
 ${time}
