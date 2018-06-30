@@ -92,6 +92,9 @@ ssh_motd() {
     sudo sed -ri 's/^(printf)/#\1/' /etc/update-motd.d/00-header
 
     sudo cp "${dir}/files/01-pretty-header" /etc/update-motd.d/
+
+    # Apply /etc/update-motd.d changes
+    sudo run-parts /etc/update-motd.d/
 }
 
 
