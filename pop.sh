@@ -8,11 +8,13 @@ fi
 dir="$(dirname "$0")"
 
 
+
 # Cache passwords
 cache_passwds() {
     sudo echo >/dev/null
     read -rp 'Github password: ' GITHUB_PASSWD
 }
+
 
 
 # Update, upgrade, and install packages
@@ -54,6 +56,7 @@ pkgs() {
 }
 
 
+
 # Use gsettings to set power settings
 power_settings() {
     # - Set the timeout to suspend when inactive
@@ -63,10 +66,12 @@ power_settings() {
 }
 
 
+
 # Use hybrid suspend to wake up quicker
 hybrid_suspend() {
     sudo cp "${dir}/files/00-use-suspend-hybrid" /etc/pm/config.d/
 }
+
 
 
 # Don't suspend while ssh connections are open
@@ -75,6 +80,7 @@ ssh_keep_awake() {
     sudo cp "${dir}/files/ssh-keep-awake.service" /etc/systemd/system/
     sudo systemctl enable ssh-keep-awake.service
 }
+
 
 
 # Clean up SSH MOTD
@@ -87,6 +93,7 @@ ssh_motd() {
 
     sudo cp "${dir}/files/01-pretty-header" /etc/update-motd.d/
 }
+
 
 
 # User and root crontabs
@@ -108,6 +115,7 @@ crontabs() {
     local r_tab='*/10 * * * * /root/pretty-header-data.sh'
     echo -e "${comments}\n\nPATH=${p}\n${mailto}\n\n${r_tab}" | sudo crontab -
 }
+
 
 
 # User directory and environment
@@ -136,6 +144,7 @@ user() {
     mv ~nelson/tor-browser_en-US ~nelson/.tor
     ~nelson/.tor/Browser/start-tor-browser --register-app
 }
+
 
 
 # Generate a new SSH key, replace the old Github key with the new one
@@ -168,6 +177,7 @@ git_ssh_key() {
     done
     curl_git '/user/keys' -d '{ "title": "Pop", "key": "'"$ssh_key"'" }'
 }
+
 
 
 cache_passwds

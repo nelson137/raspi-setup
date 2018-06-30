@@ -3,6 +3,7 @@
 dir="$(dirname "$0")/files"
 
 
+
 # Cache passwords
 cache_passwds() {
     sudo echo >/dev/null
@@ -10,10 +11,12 @@ cache_passwds() {
 }
 
 
+
 # Make new user
 mk_user() {
     sudo useradd nelson -mc 'Nelson Earle' -UG pi,adm,sudo,users
 }
+
 
 
 # Set new passwords for root, pi, and nelson
@@ -26,6 +29,7 @@ set_passwds() {
 
     echo -e "root:${root}\npi:${pi}\nnelson:${nelson}" | sudo chpasswd
 }
+
 
 
 # Update, upgrade, and install packages
@@ -52,6 +56,7 @@ pkgs() {
     sudo curl -sSL "$url" -o /usr/local/bin/youtube-dl
     sudo chmod a+rx /usr/local/bin/youtube-dl
 }
+
 
 
 # System config
@@ -111,6 +116,7 @@ system() {
 }
 
 
+
 # User and root crontabs
 crontabs() {
     # Set crontab editor to vim basic
@@ -132,6 +138,7 @@ crontabs() {
 }
 
 
+
 # User directory and environment
 user() {
     # User directory
@@ -147,6 +154,7 @@ user() {
     git clone --depth=1 "$url" ~nelson/.oh-my-zsh
     sudo chsh -s /usr/bin/zsh nelson
 }
+
 
 
 # Generate a new SSH key, replace the old Github key with the new one
@@ -179,6 +187,7 @@ git_ssh_key() {
         fi
     done
 }
+
 
 
 cache_passwds
