@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ "$UID" == 0 ]]; then
+    echo 'This script does not need to be run by root' >&2
+    exit 1
+fi
+
 dir="$(dirname "$0")"
 
 
