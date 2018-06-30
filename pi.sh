@@ -32,7 +32,7 @@ set_passwds() {
 
 
 
-# Update, upgrade, and install packages
+# Update, upgrade, install, and reinstall packages
 pkgs() {
     # PPAs
     sudo add-apt-repository -y ppa:nextcloud-devs/client
@@ -42,6 +42,8 @@ pkgs() {
     sudo apt-get dist-upgrade ||
         sudo apt-get dist-upgrade --fix-missing
     sudo apt upgrade -y
+
+    sudo apt purge -y openssh-server
 
     # Installations
     install() { sudo apt install -y "$@"; }
