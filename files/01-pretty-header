@@ -78,4 +78,4 @@ s="${seeds[$((RANDOM % 3))]}"
 # Zip fleur_de_lis and box, center it, and give it color
 for ((i=0; i<${#fleur_de_lis[@]}; i++)); do
     echo "${fleur_de_lis[i]}     ${info[i]}"
-done | unify_len | figlet -ctf term | /usr/games/lolcat -fS "$s"
+done | unify_len | /usr/games/lolcat -fS "$s"
