@@ -153,6 +153,15 @@ user() {
     local url='https://github.com/robbyrussell/oh-my-zsh.git'
     git clone --depth=1 "$url" ~nelson/.oh-my-zsh
     sudo chsh -s /usr/bin/zsh nelson
+
+    # LXPanel
+    # - Remove widgets from the lxpanel
+    # - Remove cached menu items so updates will appear
+    # - Restart lxpanel
+    cp "${dir}/files/panel" ~nelson/.config/lxpanel/LXDE-pi/panels/
+    killall lxpanel
+    find ~nelson/.cache/menus -type f -name '*' -print0 | xargs -0 rm
+    nohup lxpanel -p LXDE & disown
 }
 
 
