@@ -47,7 +47,7 @@ done < <(unify_len <<< "$fleur_de_lis_str")
 
 distro="Distro.....: $(lsb_release -s -d)"
 hostname="Hostname...: $(hostname)"
-ext_ip="Internal IP: $(ip route get 1 |
+ext_ip="Internal IP: $(ip route get 1 2>/dev/null |
                        grep -oE '192\.168(\.[0-9]{1,3}){2}' |
                        grep -v '^192\.168\.1\.1$')"
 int_ip="External IP: $(cat /etc/update-motd.d/pretty-header-ext-ip.txt)"
