@@ -195,6 +195,15 @@ git_ssh_key() {
 }
 
 
+# Root directory
+root() {
+    sudo ln -fs ~nelson/.vimrc /root/
+    sudo ln -fs ~nelson/.bashrc /root/
+    sudo ln -fs ~nelson/.bash_additions /root/
+    sudo ln -fs ~nelson/bin /root/
+}
+
+
 
 cache_passwds
 pkgs
@@ -205,3 +214,4 @@ ssh_motd
 crontabs
 user
 git_ssh_key
+root
