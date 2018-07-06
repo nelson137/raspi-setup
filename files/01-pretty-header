@@ -64,7 +64,7 @@ ${ext_ip}
 ${time}
 ${date}
 ${weather}"
-box="\n\n\n\n\n$(echo -e "$in_box" | boxes -d parchment -p h2)"
+box="\n\n\n\n\n$(echo -e "$in_box" | boxes -d parchment -p h2 2>/dev/null)"
 info=()
 while IFS= read -r line; do
     info+=( "$line" )
