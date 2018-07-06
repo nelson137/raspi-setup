@@ -133,6 +133,13 @@ user() {
     mkdir -p ~nelson/{Downloads,Projects/Git}
     git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
 
+    # Config files
+    ln -fs ~nelson/Projects/Git/dot/files/.vimrc ~nelson/
+    ln -fs ~nelson/Projects/Git/dot/files/.tmux.conf ~nelson/
+    ln -fs ~nelson/Projects/Git/dot/files/.zshrc ~nelson/
+    ln -fs ~nelson/Projects/Git/dot/files/.bashrc ~nelson/
+    ln -fs ~nelson/Projects/Git/dot/files/.bash_additions ~nelson/
+
     # git
     cp "${dir}/files/.gitconfig" ~nelson/
 
