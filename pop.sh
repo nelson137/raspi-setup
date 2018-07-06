@@ -99,6 +99,8 @@ ssh_motd() {
     # Disable last login message
     sudo sed -ri 's/^\s*#?\s*(PrintLastLog).*$/\1 no/' /etc/ssh/sshd_config
     sudo systemctl restart sshd.service
+
+    # pretty-header-data.sh setup in "Root crontabs" in crontabs()
 }
 
 
@@ -111,11 +113,11 @@ crontabs() {
     local comments="$(cat "${dir}/files/comments.crontab")"
     local mailto="MAILTO=''"
 
-    # User crontab
+    # User crontabs
     # local u_tab=''
     # echo -e "${comments}\n\n${mailto}\n\n${u_tab}" | crontab -
 
-    # Root crontab
+    # Root crontabs
     sudo cp "${dir}/files/pretty-header-data.sh" /root/
     sudo chmod +x /root/pretty-header-data.sh
     local p="'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'"
