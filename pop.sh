@@ -200,6 +200,8 @@ root() {
     sudo ln -fs ~nelson/.vimrc /root/
     sudo ln -fs ~nelson/.bashrc /root/
     sudo ln -fs ~nelson/.bash_additions /root/
+    sudo ln -fs ~nelson/.bash_aliases /root/
+    sudo ln -fs ~nelson/.bash_functions /root/
     sudo ln -fs ~nelson/bin /root/
 }
 
