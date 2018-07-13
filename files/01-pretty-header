@@ -100,14 +100,14 @@ box="\n\n\n\n\n$(echo "$in_box" | HOME=~ boxes -d parchment -p h2)"
 info=()
 while IFS= read -r line; do
     info+=( "$line" )
-done < <(echo -e "$box" | unify_len)
+done < <(echo -e "$box")
 
 
 # Pick random seed for lolcat
 seeds=( 39 49 60 )
 s="${seeds[$((RANDOM % 3))]}"
 
-# Zip fleur_de_lis and box, center it, and give it color
-for ((i=0; i<${#fleur_de_lis[@]}; i++)); do
+# Zip fleur_de_lis and box then give it color
+for (( i=0; i<${#fleur_de_lis[@]}; i++ )); do
     echo "${fleur_de_lis[i]}     ${info[i]}"
-done | unify_len | /usr/games/lolcat -fS "$s"
+done | /usr/games/lolcat -fS "$s"
