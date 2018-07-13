@@ -1,5 +1,36 @@
 #!/bin/bash
 
+int_ip() {
+    local all_ifaces=(
+        $(ip link | awk '/^[0-9]/ {print $2}' | tr -d : | grep -v '^lo$')
+    )
+
+    # Attempt to get the internal ip of each network interface
+    local -a has_ip ips
+    for iface in "${all_ifaces[@]}"; do
+        ip="$(
+            ip -4 -o a show "$iface" |
+            grep -Po '(?<=inet )[0-9]+(\.[0-9]+){3}/[0-9]+'
+        )"
+        if [[ -n "$ip" ]]; then
+            has_ip+=( "$iface" )
+            ips+=( "$ip" )
+        fi
+    done
+
+    # If there are multiple ips label each one with its iface name
+    local output
+    for i in "${!ips[@]}"; do
+        (( "$i" > 0 )) &&
+            output+='\n             '
+        (( "${#ips[@]}" > 1 )) &&
+            output+="${has_ip[i]}: "
+        output+="${ips[i]}"
+    done
+
+    echo "$output"
+}
+
 unify_len() {
     local stdin="$(cat /dev/stdin)"
 
@@ -47,9 +78,7 @@ done < <(unify_len <<< "$fleur_de_lis_str")
 
 distro="Distro.....: $(lsb_release -s -d)"
 hostname="Hostname...: $(hostname)"
-ext_ip="Internal IP: $(ip route get 1 2>/dev/null |
-                       grep -oE '192\.168(\.[0-9]{1,3}){2}' |
-                       grep -v '^192\.168\.1\.1$')"
+ext_ip="Internal IP: $(int_ip)"
 int_ip="External IP: $(cat /etc/update-motd.d/pretty-header-ext-ip.txt)"
 time="Time.......: $(date +%r)"
 date="Date.......: $(date +"%a, %b %e, %Y")"
