@@ -76,24 +76,27 @@ while IFS= read -r line; do
 done < <(unify_len <<< "$fleur_de_lis_str")
 
 
-distro="Distro.....: $(lsb_release -s -d)"
-hostname="Hostname...: $(hostname)"
-ext_ip="Internal IP: $(int_ip)"
-int_ip="External IP: $(cat /etc/update-motd.d/pretty-header-ext-ip.txt)"
-time="Time.......: $(date +%r)"
-date="Date.......: $(date +"%a, %b %e, %Y")"
-weather="Weather....: $(cat /etc/update-motd.d/pretty-header-weather.txt)"
+distro="$(lsb_release -s -d)"
+hostname="$(hostname)"
+int_ip="$(int_ip)"
+ext_ip="$(cat /etc/update-motd.d/pretty-header-ext-ip.txt)"
+time="$(date +%r)"
+date="$(date +"%a, %b %e, %Y")"
+weather="$(cat /etc/update-motd.d/pretty-header-weather.txt)"
 
 
+in_box="$(cat <<EOF
+Distro.....: ${distro}
+Hostname...: ${hostname}
+Internal IP: ${int_ip}
+External IP: ${ext_ip}
+Time.......: ${time}
+Date.......: ${date}
+Weather....: ${weather}
+EOF
+)"
 # Draw ascii art box around info
-in_box="${distro}
-${hostname}
-${int_ip}
-${ext_ip}
-${time}
-${date}
-${weather}"
-box="\n\n\n\n\n$(echo -e "$in_box" | boxes -d parchment -p h2 2>/dev/null)"
+box="\n\n\n\n\n$(echo "$in_box" | HOME=~ boxes -d parchment -p h2)"
 info=()
 while IFS= read -r line; do
     info+=( "$line" )
