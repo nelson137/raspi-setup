@@ -1,12 +1,14 @@
 #!/bin/bash
 
-int_ip() {
+
+
+get_int_ips() {
     local all_ifaces=(
         $(ip link | awk '/^[0-9]/ {print $2}' | tr -d : | grep -v '^lo$')
     )
 
     # Attempt to get the internal ip of each network interface
-    local -a has_ip ips
+    local -a has_ip int_ips
     for iface in "${all_ifaces[@]}"; do
         ip="$(
             ip -4 -o a show "$iface" |
@@ -31,18 +33,22 @@ int_ip() {
     echo "$output"
 }
 
-unify_len() {
-    local stdin="$(cat /dev/stdin)"
 
+
+unify_len() {
     # Pad each line with trailing spaces so that they are the same length
+
+    local stdin="$(cat /dev/stdin)"
     local longest="$(echo "$stdin" | awk '{print length}' | sort -n | tail -1)"
     local len spaces
+
     echo "$stdin" | while IFS= read -r line; do
         len="$(echo "$line" | awk '{print length}')"
         spaces="$(printf "%$((longest-len))s")"
         echo "${line}${spaces}"
     done
 }
+
 
 
 fleur_de_lis_str="$(cat <<'EOF'
@@ -78,11 +84,12 @@ done < <(unify_len <<< "$fleur_de_lis_str")
 
 distro="$(lsb_release -s -d)"
 hostname="$(hostname)"
-int_ip="$(int_ip)"
+int_ip="$(get_int_ips)"
 ext_ip="$(cat /etc/update-motd.d/pretty-header-ext-ip.txt)"
 time="$(date +%r)"
 date="$(date +"%a, %b %e, %Y")"
 weather="$(cat /etc/update-motd.d/pretty-header-weather.txt)"
+
 
 
 in_box="$(cat <<EOF
@@ -101,6 +108,7 @@ info=()
 while IFS= read -r line; do
     info+=( "$line" )
 done < <(echo -e "$box")
+
 
 
 # Pick random seed for lolcat
