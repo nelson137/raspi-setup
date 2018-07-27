@@ -148,7 +148,7 @@ user() {
     sudo cp -r /usr/share/git-core/templates/ ~nelson/.git_templates/
     sudo chown -R nelson:nelson ~nelson/.git_templates/
     cp "${dir}/files/commit-msg" ~nelson/.git_templates/hooks/
-    chmod +x ~nelson/.git_templates/hooks/commit-msg
+    chmod a+x ~nelson/.git_templates/hooks/commit-msg
 
     # Oh My Zsh
     local url='https://github.com/robbyrussell/oh-my-zsh.git'
