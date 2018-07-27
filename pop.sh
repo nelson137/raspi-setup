@@ -33,7 +33,7 @@ pkgs() {
     install apache2 boxes build-essential cmake dnsutils figlet git \
         html-xml-utils libsecret-tools lolcat nextcloud-client nodejs \
         openssh-server python3-flask python3-pip python3-tk shellinabox \
-        solaar tmux upower vim vlc w3m zsh
+        tmux upower vim vlc w3m zsh
 
     # youtube-dl
     # Don't install from repositories because they are behind
