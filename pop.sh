@@ -57,6 +57,14 @@ pkgs() {
 
 
 
+# Prevent screen tearing
+no_tear() {
+    mkdir /etc/X11/xorg.conf.d/
+    cp "${dir}/files/20-intel.conf" /etc/X11/xorg.conf.d/
+}
+
+
+
 # Use gsettings to set power settings
 power_settings() {
     # - Set the timeout to suspend when inactive
@@ -216,6 +224,7 @@ root() {
 
 cache_passwds
 pkgs
+no_tear
 power_settings
 hybrid_suspend
 ssh_keep_awake
