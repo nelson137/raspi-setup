@@ -74,6 +74,12 @@ system() {
     # - Comment out autologin-user= in /etc/lightdm/lightdm.conf
     sudo sed -ri 's/^(autologin-user=)/#\1/' /etc/lightdm/lightdm.conf
 
+    # Disable splash screen on boot
+    # - Removes arguments from the boot cmdline
+    sed -i 's/ quiet//' /boot/cmdline.txt
+    sed -i 's/ splash//' /boot/cmdline.txt
+    sed -i 's/ plymouth.ignore-serial-consoles//' /boot/cmdline.txt
+
     # Turn off bluetooth on boot
     # - Add rfkill block bluetooth to rc.local
     [[ ! -f /etc/rc.local ]] &&
