@@ -170,6 +170,15 @@ user() {
     killall lxpanel
     find ~nelson/.cache/menus -type f -name '*' -print0 | xargs -0 rm
     nohup lxpanel -p LXDE & disown
+
+    # LXTerminal
+    # - Use the xterm color palette
+    # - Cursor blinks
+    # - Hide scroll bar
+    local conf_file=~nelson/.config/lxterminal/lxterminal.conf
+    sed -i '/^color_present=/ s/VGA/xterm/' "$conf_file"
+    sed -i '/^cursorblinks=/ s/false/true/' "$conf_file"
+    sed -i '/^hidescrollbar=/ s/false/true/' "$conf_file"
 }
 
 
