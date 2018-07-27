@@ -160,7 +160,7 @@ user() {
     # Oh My Zsh
     local url='https://github.com/robbyrussell/oh-my-zsh.git'
     git clone --depth=1 "$url" ~nelson/.oh-my-zsh
-    sudo chsh -s /usr/bin/zsh nelson
+    sudo chsh nelson -s /usr/bin/zsh
 
     # LXPanel
     # - Remove widgets from the lxpanel
@@ -196,8 +196,8 @@ git_ssh_key() {
     }
 
     # Generate SSH key
-    yes y | ssh-keygen -t rsa -b 4096 -C 'nelson.earle137@gmail.com' \
-        -f ~nelson/.ssh/id_rsa -N ''
+    local email='nelson.earle137@gmail.com'
+    ssh-keygen -t rsa -b 4096 -C "$email" -f ~nelson/.ssh/id_rsa -N ''
 
     # For each ssh key
     # - Get more data about the key
