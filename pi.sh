@@ -66,6 +66,12 @@ system() {
     # Timezone
     sudo timedatectl set-timezone America/Chicago
 
+    # Locale
+    sudo sed -ri 's/^\s*([^#]+)$/# \1/' /etc/locale.gen
+    sudo sed -ri 's/^# (en_US\.UTF-8 UTF-8)$/\1/' /etc/locale.gen
+    sudo locale-gen
+    sudo sed -i '/LANG/ s/GB/US/' /etc/default/locale
+
     # Keyboard layout
     # - Sets keyboard layout to 
     sudo cp "${dir}/files/keyboard" /etc/default/keyboard
