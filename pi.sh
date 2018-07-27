@@ -73,11 +73,9 @@ system() {
     sudo sed -i '/LANG/ s/GB/US/' /etc/default/locale
 
     # Keyboard layout
-    # - Sets keyboard layout to 
     sudo cp "${dir}/files/keyboard" /etc/default/keyboard
 
     # Don't autologin
-    # - Comment out autologin-user= in /etc/lightdm/lightdm.conf
     sudo sed -ri 's/^(autologin-user=)/#\1/' /etc/lightdm/lightdm.conf
 
     # Disable splash screen on boot
