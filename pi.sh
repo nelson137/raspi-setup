@@ -160,8 +160,15 @@ user() {
     chown -R nelson:nelson ~nelson/
     git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
 
-    # Git
-    cp "${dir}/.gitconfig" ~nelson/
+    # git
+    # - Copy .gitconfig to ~nelson/
+    # - Copy /usr/share/git-core/templates/ to ~nelson/.git_templates/
+    # - Copy commit-msg to ~nelson/.git_templates/
+    cp "${dir}/files/.gitconfig" ~nelson/
+    sudo cp -r /usr/share/git-core/templates/ ~nelson/.git_templates/
+    sudo chown -R nelson:nelson ~nelson/.git_templates/
+    cp "${dir}/files/commit-msg" ~nelson/.git_templates/hooks/
+    chmod a+x ~nelson/.git_templates/hooks/commit-msg
 
     # Oh My Zsh
     local url='https://github.com/robbyrussell/oh-my-zsh.git'
