@@ -59,7 +59,7 @@ pkgs() {
 
 # Prevent screen tearing
 no_tear() {
-    mkdir /etc/X11/xorg.conf.d/
+    mkdir -p /etc/X11/xorg.conf.d/
     cp "${dir}/files/20-intel.conf" /etc/X11/xorg.conf.d/
 }
 
