@@ -1,28 +1,32 @@
 #!/bin/bash
 
-mk_src() { echo "$1" | sudo tee "/etc/apt/sources.list.d/$2.list" >/dev/null; }
-curl_add_key() { curl -sSL "$1" | sudo apt-key add - }
+mk_src() { echo "$2" | sudo tee "/etc/apt/sources.list.d/$1.list" >/dev/null; }
+curl_add_key() { curl -sSL "$1" | sudo apt-key add -; }
+apt_add_key() {
+    local ks="$1"
+    shift
+    sudo apt-key adv --keyserver "$ks" --recv-keys "$@"
+}
 
 # Etcher
-mk_src 'deb https://dl.bintray.com/resin-io/debian/ stable etcher' etcher
-sudo apt-key adv --keyserver 'hkp://pgp.mit.edu:80' --recv-keys \
-    379CE192D401AB61
+mk_src etcher 'deb https://dl.bintray.com/resin-io/debian/ stable etcher'
+apt_add_key 'hkp://pgp.mit.edu:80' 379CE192D401AB61
 
 # Google Chrome
-mk_src 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' \
-    google-chrome
+mk_src google-chrome \
+    'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main'
 curl_add_key 'https://dl.google.com/linux/linux_signing_key.pub'
 
 # OBS
 sudo add-apt-repository -y ppa:obsproject/obs-studio
 
 # Spotify
-mk_src 'deb http://repository.spotify.com/ stable non-free' spotify
-sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-keys \
+mk_src spotify 'deb http://repository.spotify.com/ stable non-free'
+apt_add_key 'hkp://keyserver.ubuntu.com:80' \
     931FF8E79F0876134EDDBDCCA87FF9DF48BF1C90
 
 # Sublime
-mk_src 'deb https://download.sublimetext.com/ apt/stable/' sublime-text
+mk_src sublime-text 'deb https://download.sublimetext.com/ apt/stable/'
 curl_add_key 'https://download.sublimetext.com/sublimehq-pub.gpg'
 
 # Teamviewer
