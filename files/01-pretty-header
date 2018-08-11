@@ -17,6 +17,62 @@ def unify_len(lines):
     return [l + ' '*(longest-len(l)) for l in lines]
 
 
+def get_ascii_art():
+    """Return a randomly chosen ASCII art string."""
+    fleur_de_lis = '''
+             8
+           .d8b.
+       _.d8888888b._
+     .88888888888888b.
+    d88888888888888888b
+    8888888888888888888
+    Y88888888888888888P
+     'Y8888888888888P'
+   _..._ 'Y88888P' _..._
+ .d88889b. Y888P .d88888b.
+d888888888b 888 d88888888b
+888P  `Y8888888888P'  Y888
+ b8b    Y88888888P    d8Y
+  `"'  #############  '"`
+         dP d8b Yb
+     Ob=dP d888b Yb=dO
+      `"` O88888O `"`
+   jgs     'Y8P'
+             '
+     by: Joan G. Stark
+    '''
+
+    animal_skull = '''
+          .                                                      .
+        .n                   .                 .                  n.
+  .   .dP                  dP                   9b                 9b.    .
+ 4    qXb         .       dX                     Xb       .        dXp     t
+dX.    9Xb      .dXb    __                         __    dXb.     dXP     .Xb
+9XXb._       _.dXXXXb dXXXXbo.                 .odXXXXb dXXXXb._       _.dXXP
+ 9XXXXXXXXXXXXXXXXXXXVXXXXXXXXOo.           .oOXXXXXXXXVXXXXXXXXXXXXXXXXXXXP
+  `9XXXXXXXXXXXXXXXXXXXXX'~   ~`OOO8b   d8OOO'~   ~`XXXXXXXXXXXXXXXXXXXXXP'
+    `9XXXXXXXXXXXP' `9XX'          `98v8P'          `XXP' `9XXXXXXXXXXXP'
+        ~~~~~~~       9X.          .db|db.          .XP       ~~~~~~~
+                        )b.  .dbo.dP'`v'`9b.odb.  .dX(
+                      ,dXXXXXXXXXXXb     dXXXXXXXXXXXb.
+                     dXXXXXXXXXXXP'   .   `9XXXXXXXXXXXb
+                    dXXXXXXXXXXXXb   d|b   dXXXXXXXXXXXXb
+                    9XXb'   `XXXXXb.dX|Xb.dXXXXX'   `dXXP
+                     `'      9XXXXXX(   )XXXXXXP      `'
+                              XXXX X.`v'.X XXXX
+                              XP^X'`b   d'`X^XX
+                              X. 9  `   '  P )X
+                              `b  `       '  d'
+                               `             '
+    '''
+
+    choices = [fleur_de_lis, animal_skull]
+    # Get one of choices at random
+    c = choices[randint(0, len(choices)-1)]
+    # Remove the leading newline and all trailing space
+    return c[1:].rstrip()
+
+
 def get_int_ips():
     """Return a str describing this system's internal ip address(es).
 
@@ -135,34 +191,11 @@ def main():
         | space.    |
         +-----------+
     """
-    fleur_de_lis = '''
-             8
-           .d8b.
-       _.d8888888b._
-     .88888888888888b.
-    d88888888888888888b
-    8888888888888888888
-    Y88888888888888888P
-     'Y8888888888888P'
-   _..._ 'Y88888P' _..._
- .d88889b. Y888P .d88888b.
-d888888888b 888 d88888888b
-888P  `Y8888888888P'  Y888
- b8b    Y88888888P    d8Y
-  `"'  #############  '"`
-         dP d8b Yb
-     Ob=dP d888b Yb=dO
-      `"` O88888O `"`
-   jgs     'Y8P'
-             '
-     by: Joan G. Stark
-    '''[1:].rstrip()  # Remove the leading newline and all trailing space
-    fleur_de_lis = unify_len(fleur_de_lis.split('\n'))
-
+    ascii_art = unify_len(get_ascii_art().split('\n'))
     box = get_info_box().split('\n')
 
-    # Zip ascii_art and box_str
-    output = [a + '     ' + b for a, b in zip_center(fleur_de_lis, box)]
+    # Combine ascii_art and box_str
+    output = [a + '     ' + b for a, b in zip_center(ascii_art, box)]
 
     # Pick a random seed for lolcat from seeds
     seeds = [39, 49, 60]
