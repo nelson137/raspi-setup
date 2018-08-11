@@ -1,56 +1,141 @@
-#!/bin/bash
+#!/usr/bin/env python3
+
+"""Output an SSH MOTD with ASCII art and some general information."""
 
 
-get_int_ips() {
-    local all_ifaces=(
-        $(ip link | awk '/^[0-9]/ {print $2}' | tr -d : | grep -v '^lo$')
-    )
+from datetime import datetime
+from math import ceil, floor
+from random import randint
+from re import search
+from subprocess import check_output
+from tempfile import NamedTemporaryFile
 
-    # Attempt to get the internal ip of each network interface
-    local ip
-    local -a has_ip ips
-    for iface in "${all_ifaces[@]}"; do
-        ip="$(
-            ip -4 -o a show "$iface" |
-            grep -Po '(?<=inet )[0-9]+(\.[0-9]+){3}/[0-9]+'
-        )"
-        if [[ "$ip" ]]; then
-            has_ip+=( "$iface" )
-            ips+=( "$ip" )
-        fi
-    done
+
+def unify_len(lines):
+    """Pad each line with trailing spaces, making them the same length."""
+    longest = max([len(l) for l in lines])
+    return [l + ' '*(longest-len(l)) for l in lines]
+
+
+def get_int_ips():
+    """Return a str describing this system's internal ip address(es).
+
+    If there is more than one, each ip address will be labeled with its
+    respective iface name.
+    """
+    # Get iface info
+    out = check_output(['ip', 'link']).decode().strip().split('\n')
+    # Get the iface names from the output
+    interfaces = [search(r'^\d+: ([^:]+):', line) for line in out]
+    interfaces = [mo.groups()[0] for mo in interfaces if mo is not None]
+    # Remove lo from the list of interfaces
+    if 'lo' in interfaces:
+        interfaces.remove('lo')
+
+    # Create a dict of all iface names and their ip addrs if they have one
+    int_ips = {}
+    cmd = 'ip -4 -o a show'.split()
+    for iface in interfaces:
+        out = check_output([*cmd, iface]).decode().strip()
+        mo = search(r'(?<=inet )(\d+(\.\d+){3}/\d+)', out)
+        if mo is not None:
+            int_ips[iface] = mo.groups()[0]
 
     # If there are multiple ips, label each one with its iface name
-    local output
-    for i in "${!ips[@]}"; do
-        (( "$i" > 0 )) &&
-            output+='\n             '
-        (( "${#ips[@]}" > 1 )) &&
-            output+="${has_ip[i]}: "
-        output+="${ips[i]}"
-    done
-
-    echo "$output"
-}
+    if len(int_ips) > 1:
+        output = ['%s: %s' % (k, v) for k, v in int_ips.items()]
+        return '\n             '.join(output)
+    else:
+        return list(int_ips.values())[0]
 
 
-unify_len() {
-    # Pad each line with trailing spaces so that they are the same length
+def get_info_box():
+    r"""Return a block of information with an ASCII box drawn around it.
 
-    local stdin="$(cat /dev/stdin)"
-    local longest="$(echo "$stdin" | awk '{print length}' | sort -n | tail -1)"
+    Example:
+        >>> box = get_info_box()
+        >>> print(box)
+         ______________________
+        /\                     \
+        \_|  Distro.....: ...  |
+          |  Hostname...: ...  |
+          |  Internal IP: ...  |
+          |  External IP: ...  |
+          |  Time.......: ...  |
+          |  Date.......: ...  |
+          |  Weather....: ...  |
+          |                    |
+          |   _________________|_
+           \_/___________________/
+    """
+    distro = '$(lsb_release -sd)'
+    hostname = '$(hostname)'
+    int_ip = get_int_ips()
+    with open('/etc/update-motd.d/pretty-header-ext-ip.txt', 'r') as f:
+        ext_ip = f.read().strip()
+    time = datetime.now().time().strftime('%I:%M:%S %p')
+    date = datetime.now().date().strftime('%a, %b %d, %Y')
+    with open('/etc/update-motd.d/pretty-header-weather.txt', 'r') as f:
+        weather = f.read().strip()
 
-    local len spaces
-    echo "$stdin" | while IFS= read -r line; do
-        len="$(echo "$line" | awk '{print length}')"
-        spaces="$(printf "%$((longest-len))s")"
-        echo "${line}${spaces}"
-    done
-}
+    box_info = ['Distro.....: %s' % distro,
+                'Hostname...: %s' % hostname,
+                'Internal IP: %s' % int_ip,
+                'External IP: %s' % ext_ip,
+                'Time.......: %s' % time,
+                'Date.......: %s' % date,
+                'Weather....: %s' % weather]
+    box_info = ''.join([e + '\n' for e in box_info])
+
+    # Draw a box around info
+    cmd = 'echo "%s" | HOME=~ boxes -d parchment -p h2' % box_info
+    return check_output(cmd, shell=True).decode()
 
 
-fleur_de_lis_str="$(cat <<'EOF'
+def zip_center(first, second):
+    """Zip two lists, padding the front and back of the shorter list.
 
+    Empty strings are added to both sides of the shorter of the two lists
+    passed as arguments. If the number of empty strings to be padded is odd,
+    the extra one is prepended to the shorter list.
+
+    Example:
+        >>> first =  ['a', 'b', 'c', 'd', 'e', 'f']
+        >>> second = [          'x', 'y', 'z'     ]
+        >>> center_zip(first, second)
+        [('a', ''), ('b', ''), ('c', 'x'), ('d', 'y'), ('e', 'z'), ('f', '')]
+    """
+    if len(first) > len(second):
+        longest = first
+        shortest = second
+    elif len(second) > len(first):
+        longest = second
+        shortest = first
+    else:
+        return zip(first, second)
+
+    diff = (len(longest)-len(shortest)) / 2
+    shortest[:0] = [''] * ceil(diff)
+    shortest.extend([''] * floor(diff))
+
+    return zip(first, second)
+
+
+def main():
+    """Combine ASCII art and some information, then colorize and output it.
+
+    Example:
+        >>> main()
+        +-----------+
+        | This is   |
+        | the ascii |   +--------------+
+        | art that  |   | This is the  |
+        | takes up  |   | information. |
+        | a lot of  |   +--------------+
+        | space.    |
+        +-----------+
+    """
+    fleur_de_lis = '''
              8
            .d8b.
        _.d8888888b._
@@ -71,48 +156,26 @@ d888888888b 888 d88888888b
    jgs     'Y8P'
              '
      by: Joan G. Stark
-EOF
-)"
+    '''[1:].rstrip()  # Remove the leading newline and all trailing space
+    fleur_de_lis = unify_len(fleur_de_lis.split('\n'))
 
-fleur_de_lis=()
-while IFS= read -r line; do
-    fleur_de_lis+=( "$line" )
-done < <(unify_len <<< "$fleur_de_lis_str")
+    box = get_info_box().split('\n')
 
+    # Zip ascii_art and box_str
+    output = [a + '     ' + b for a, b in zip_center(fleur_de_lis, box)]
 
-distro="$(lsb_release -s -d)"
-hostname="$(hostname)"
-int_ip="$(get_int_ips)"
-ext_ip="$(cat /etc/update-motd.d/pretty-header-ext-ip.txt)"
-time="$(date +%r)"
-date="$(date +"%a, %b %e, %Y")"
-weather="$(cat /etc/update-motd.d/pretty-header-weather.txt)"
+    # Pick a random seed for lolcat from seeds
+    seeds = [39, 49, 60]
+    s = seeds[randint(0, len(seeds)-1)]
 
-
-in_box="$(cat <<EOF
-Distro.....: ${distro}
-Hostname...: ${hostname}
-Internal IP: ${int_ip}
-External IP: ${ext_ip}
-Time.......: ${time}
-Date.......: ${date}
-Weather....: ${weather}
-EOF
-)"
-
-# Draw ascii art box around info
-box="\n\n\n\n\n$(echo "$in_box" | HOME=~ boxes -d parchment -p h2)"
-info=()
-while IFS= read -r line; do
-    info+=( "$line" )
-done < <(echo -e "$box")
+    with NamedTemporaryFile() as tf:
+        # Write the output to a temp file
+        tf.write('\n'.join(output).encode('utf-8'))
+        tf.flush()
+        # Open the temp file for reading and direct it into lolcat
+        cmd = '/usr/games/lolcat -fS %s < %s' % (s, tf.name)
+        print(check_output(cmd, shell=True).decode(), end='')
 
 
-# Pick random seed for lolcat
-seeds=( 39 49 60 )
-s="${seeds[$((RANDOM % 3))]}"
-
-# Zip fleur_de_lis and box then give it color
-for (( i=0; i<${#fleur_de_lis[@]}; i++ )); do
-    echo "${fleur_de_lis[i]}     ${info[i]}"
-done | /usr/games/lolcat -fS "$s"
+if __name__ == '__main__':
+    main()
