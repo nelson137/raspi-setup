@@ -5,7 +5,7 @@
 
 from datetime import datetime
 from math import ceil, floor
-from random import randint
+from random import choice, randint
 from re import search
 from subprocess import check_output
 from tempfile import NamedTemporaryFile
@@ -66,11 +66,12 @@ dX.    9Xb      .dXb    __                         __    dXb.     dXP     .Xb
                                `             '
     '''
 
-    choices = [fleur_de_lis, animal_skull]
-    # Get one of choices at random
-    c = choices[randint(0, len(choices)-1)]
+    # A dict of this function's local variables and their values
+    art_choices = locals()
+    # Get one of art_choices' keys at random
+    key = choice(list(art_choices.keys()))
     # Remove the leading newline and all trailing space
-    return c[1:].rstrip()
+    return art_choices[key][1:].rstrip()
 
 
 def get_int_ips():
