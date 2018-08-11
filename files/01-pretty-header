@@ -39,10 +39,9 @@ d888888888b 888 d88888888b
       `"` O88888O `"`
    jgs     'Y8P'
              '
-     by: Joan G. Stark
-    '''
+     by: Joan G. Stark'''
 
-    animal_skull = '''
+    animal_skull = """
           .                                                      .
         .n                   .                 .                  n.
   .   .dP                  dP                   9b                 9b.    .
@@ -63,15 +62,14 @@ dX.    9Xb      .dXb    __                         __    dXb.     dXP     .Xb
                               XP^X'`b   d'`X^XX
                               X. 9  `   '  P )X
                               `b  `       '  d'
-                               `             '
-    '''
+                               `             '"""
 
     # A dict of this function's local variables and their values
     art_choices = locals()
     # Get one of art_choices' keys at random
     key = choice(list(art_choices.keys()))
-    # Remove the leading newline and all trailing space
-    return art_choices[key][1:].rstrip()
+    # Remove the leading newline
+    return art_choices[key][1:]
 
 
 def get_int_ips():
