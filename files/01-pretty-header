@@ -194,7 +194,8 @@ def main():
     box = get_info_box().split('\n')
 
     # Combine ascii_art and box_str
-    output = [a + '     ' + b for a, b in zip_center(ascii_art, box)]
+    output = ([a + '     ' + b for a, b in zip_center(ascii_art, box)])
+    output = '\n'.join(output)
 
     # Pick a random seed for lolcat from seeds
     seeds = [39, 49, 60]
@@ -202,7 +203,7 @@ def main():
 
     with NamedTemporaryFile() as tf:
         # Write the output to a temp file
-        tf.write('\n'.join(output).encode('utf-8'))
+        tf.write(output.encode('utf-8'))
         tf.flush()
         # Open the temp file for reading and direct it into lolcat
         cmd = '/usr/games/lolcat -fS %s < %s' % (s, tf.name)
