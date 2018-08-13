@@ -30,7 +30,8 @@ pkgs() {
     sudo apt upgrade -y
 
     # Make sure apt-add-repository is installed
-    sudo apt install -y apt-add-repository
+    which add-apt-repository >/dev/null ||
+        sudo apt install -y apt-add-repository
 
     # PPAs
     sudo add-apt-repository -y ppa:nextcloud-devs/client
