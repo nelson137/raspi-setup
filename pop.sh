@@ -53,7 +53,7 @@ pkgs() {
     # Install figlet font files
     local -a fonts=(banner3 colossal nancyj roman univers)
     for f in "${fonts[@]}"; do
-        if [[ ! -f /usr/share/figlet/${f}.flf ]]; then
+        if [[ ! -e /usr/share/figlet/${f}.flf ]]; then
             sudo curl -sS "http://www.figlet.org/fonts/${f}.flf" \
                 -o "/usr/share/figlet/${f}.flf"
         fi
@@ -102,7 +102,7 @@ ssh_motd() {
     sudo sed -i '/^ENABLED/ s/1/0/' /etc/default/motd-news
 
     # Disable welcome message
-    sudo sed -ri 's/^(printf)/#\1/' /etc/update-motd.d/00-header
+    sudo sed -ri 's/^(printf)/# \1/' /etc/update-motd.d/00-header
 
     sudo cp "${dir}/files/01-pretty-header" /etc/update-motd.d/
 
@@ -147,11 +147,10 @@ user() {
     git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
 
     # Config files
-    ln -fs ~nelson/Projects/Git/dot/files/.vimrc ~nelson/
-    ln -fs ~nelson/Projects/Git/dot/files/.tmux.conf ~nelson/
-    ln -fs ~nelson/Projects/Git/dot/files/.zshrc ~nelson/
-    ln -fs ~nelson/Projects/Git/dot/files/.bashrc ~nelson/
-    ln -fs ~nelson/Projects/Git/dot/files/.bash_additions ~nelson/
+    local conf_files=(.vimrc .tmux.conf .zshrc .bashrc .bash_additions)
+    for cf in "${conf_files[@]}"; do
+        ln -fs ~nelson/Projects/Git/dot/files/"$cf" ~nelson/
+    done
 
     # git
     # - Copy .gitconfig to ~nelson/
