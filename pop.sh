@@ -20,8 +20,7 @@ cache_passwds() {
 # Update, upgrade, and install packages
 pkgs() {
     # Pip installations
-    sudo su nelson pip3 install flake8 flake8-docstrings isort lolcat \
-        pycodestyle
+    sudo su nelson pip3 install flake8 flake8-docstrings isort pycodestyle
 
     # Update and upgrade
     sudo apt update
