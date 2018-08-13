@@ -19,8 +19,9 @@ cache_passwds() {
 
 # Update, upgrade, and install packages
 pkgs() {
-    # PPAs
-    sudo add-apt-repository -y ppa:nextcloud-devs/client
+    # Pip installations
+    sudo su nelson pip3 install flake8 flake8-docstrings isort lolcat \
+        pycodestyle
 
     # Update and upgrade
     sudo apt update
@@ -28,9 +29,11 @@ pkgs() {
         sudo apt-get dist-upgrade --fix-missing
     sudo apt upgrade -y
 
-    # Pip installations
-    sudo su nelson pip3 install flake8 flake8-docstrings isort lolcat \
-        pycodestyle
+    # Make sure apt-add-repository is installed
+    sudo apt install -y apt-add-repository
+
+    # PPAs
+    sudo add-apt-repository -y ppa:nextcloud-devs/client
 
     # Installations
     sudo apt install -y apache2 boxes build-essential cmake dnsutils figlet \
@@ -38,8 +41,11 @@ pkgs() {
         nodejs openssh-server pylint python3-flask python3-pip python3-tk \
         shellinabox tmux upower vim vlc w3m zsh
 
-    # youtube-dl
-    # Don't install from repositories because they are behind
+    # Install Etcher, Google Chrome, OBS, Spotify, Sublime Text, Teamviewer,
+    # and Virtualbox
+    "${dir}/external-installs.sh"
+
+    # Manually install youtube-dl because the repositories might be behind
     local url='https://yt-dl.org/downloads/latest/youtube-dl'
     sudo curl -sSL "$url" -o /usr/local/bin/youtube-dl
     sudo chmod a+rx /usr/local/bin/youtube-dl
@@ -52,10 +58,6 @@ pkgs() {
                 -o "/usr/share/figlet/${f}.flf"
         fi
     done
-
-    # Install Etcher, Google Chrome, OBS, Spotify, Sublime Text, Teamviewer,
-    # and Virtualbox
-    "${dir}/external-installs.sh"
 }
 
 
