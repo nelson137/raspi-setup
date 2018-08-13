@@ -151,6 +151,7 @@ user() {
     for cf in "${conf_files[@]}"; do
         ln -fs ~nelson/Projects/Git/dot/files/"$cf" ~nelson/
     done
+    ln -fs ~nelson/Projects/Git/dot/i3 ~nelson/.config/
 
     # git
     # - Copy .gitconfig to ~nelson/
