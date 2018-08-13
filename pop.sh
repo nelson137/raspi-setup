@@ -34,8 +34,8 @@ pkgs() {
 
     # Installations
     sudo apt install -y apache2 boxes build-essential cmake dnsutils figlet \
-        git html-xml-utils libsecret-tools lolcat nextcloud-client nmap \
-        nodejs openssh-server python3-flask python3-pip python3-tk \
+        git html-xml-utils jq libsecret-tools lolcat nextcloud-client nmap \
+        nodejs openssh-server pylint python3-flask python3-pip python3-tk \
         shellinabox tmux upower vim vlc w3m zsh
 
     # youtube-dl
