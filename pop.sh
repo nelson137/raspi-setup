@@ -28,6 +28,10 @@ pkgs() {
         sudo apt-get dist-upgrade --fix-missing
     sudo apt upgrade -y
 
+    # Pip installations
+    sudo su nelson pip3 install flake8 flake8-docstrings isort lolcat \
+        pycodestyle
+
     # Installations
     install() { sudo apt install -y "$@"; }
     install apache2 boxes build-essential cmake dnsutils figlet git \
