@@ -192,7 +192,8 @@ git_ssh_key() {
     }
 
     # Generate SSH key
-    sudo -u nelson ssh-keygen -t rsa -b 4096 -C 'nelson.earle137@gmail.com' \
+    local email='nelson.earle137@gmail.com'
+    echo y | sudo -u nelson ssh-keygen -t rsa -b 4096 -C "$email" \
         -f ~nelson/.ssh/id_rsa -N ''
 
     # For each ssh key
