@@ -20,6 +20,7 @@ dl_file_sudo() {
 cache_passwds() {
     sudo echo >/dev/null
     read -srp 'Github password: ' GITHUB_PASSWD
+    echo
 }
 
 
@@ -32,8 +33,10 @@ users_groups() {
 
     # Change root and new users's passwords
     local root_p nelson_p
-    read -rp 'New password for root: ' root_p
-    read -rp 'New password for nelson: ' nelson_p
+    read -srp 'New password for root: ' root_p
+    echo
+    read -srp 'New password for nelson: ' nelson_p
+    echo
     echo "root:$root_p\nnelson:$nelson_p" | sudo chpasswd
 }
 
