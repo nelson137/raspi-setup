@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dir="$(dirname "$0")/files"
+dir="$(dirname "$0")"
 
 
 
@@ -115,7 +115,7 @@ system() {
     local n="$(cat /etc/apache2/ports.conf | grep -n Listen | cut -d: -f1)"
     ((n++))
     sudo sed -i "${n}i Listen 6184"
-    sudo cp "${dir}/shellinabox.conf" /etc/apache2/sites-available/
+    sudo cp "${dir}/files/shellinabox.conf" /etc/apache2/sites-available/
     sudo a2enmod proxy proxy_http
     sudo a2ensite shellinabox.conf
     sudo systemctl restart apache2.service
