@@ -175,7 +175,6 @@ user() {
     local conf_file=~nelson/.config/lxterminal/lxterminal.conf
     sed -i '/^color_present=/ s/VGA/xterm/' "$conf_file"
     sed -i '/^cursorblinks=/ s/false/true/' "$conf_file"
-    sed -i '/^hidescrollbar=/ s/false/true/' "$conf_file"
 
     # Make sure all files and directories are owned by nelson
     sudo chown -R nelson:nelson ~nelson
