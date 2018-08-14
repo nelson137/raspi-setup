@@ -30,7 +30,7 @@ users_groups() {
 # Update, upgrade, install, and reinstall packages
 pkgs() {
     # Pip installations
-    pip install flake8 flake8-docstrings isort pycodestyle
+    sudo -u nelson pip install flake8 flake8-docstrings isort pycodestyle
 
     # Make sure apt-add-repository is installed
     which add-apt-repository >/dev/null ||
