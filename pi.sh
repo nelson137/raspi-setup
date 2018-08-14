@@ -192,8 +192,8 @@ git_ssh_key() {
     }
 
     # Generate SSH key
-    local email='nelson.earle137@gmail.com'
-    ssh-keygen -t rsa -b 4096 -C "$email" -f ~nelson/.ssh/id_rsa -N ''
+    sudo -u nelson ssh-keygen -t rsa -b 4096 -C 'nelson.earle137@gmail.com' \
+        -f ~nelson/.ssh/id_rsa -N ''
 
     # For each ssh key
     # - Get more data about the key
@@ -202,7 +202,7 @@ git_ssh_key() {
     local -a key_ids=(
         $(curl_git '/users/nelson137/keys' | awk '/^\[/,/^\]/' | jq '.[].id')
     )
-    local ssh_key="$(< ~nelson/.ssh/id_rsa.pub)"
+    local ssh_key="$(sudo cat ~nelson/.ssh/id_rsa.pub)"
     for id in "${key_ids[@]}"; do
         local json="$(curl_git "/user/keys/$id" | awk '/^\{/,/^\}/')"
         if [[ $(jq -r '.title' <<< "$json") == Pi ]]; then
