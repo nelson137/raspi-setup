@@ -34,6 +34,9 @@ set_passwds() {
 
 # Update, upgrade, install, and reinstall packages
 pkgs() {
+    # Pip installations
+    pip install flake8 flake8-docstrings isort pycodestyle
+
     # PPAs
     sudo add-apt-repository -y ppa:nextcloud-devs/client
 
