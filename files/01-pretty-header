@@ -4,7 +4,6 @@
 
 
 from datetime import datetime
-from math import ceil, floor
 from random import choice, randint
 from re import search
 from subprocess import check_output
@@ -169,9 +168,9 @@ def zip_center(first, second):
     else:
         return zip(first, second)
 
-    diff = (len(longest)-len(shortest)) / 2
-    shortest[:0] = [''] * ceil(diff)
-    shortest.extend([''] * floor(diff))
+    quot, rem = divmod(len(longest)-len(shortest), 2)
+    shortest[:0] = [''] * (quot+1 if rem else quot)
+    shortest.extend([''] * quot)
 
     return zip(first, second)
 
