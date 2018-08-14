@@ -53,10 +53,9 @@ pkgs() {
     sudo apt purge -y openssh-server
 
     # Installations
-    install() { sudo apt install -y "$@"; }
-    install apache2 boxes build-essential cmake dnsutils figlet git \
-        html-xml-utils libsecret-tools lolcat nextcloud-client nmap nodejs \
-        openssh-server python3-flask python3-pip python3-tk shellinabox \
+    sudo apt install -y apache2 boxes build-essential cmake dnsutils figlet \
+        git html-xml-utils jq libsecret-tools lolcat nextcloud-client nmap \
+        nodejs openssh-server phantomjs python3-flask python3-pip shellinabox \
         tmux upower vim w3m zsh
 
     # youtube-dl
