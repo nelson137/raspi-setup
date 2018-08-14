@@ -5,7 +5,26 @@ if [[ "$UID" == 0 ]]; then
     exit 1
 fi
 
-dir="$(dirname "$0")"
+
+
+dl_file() {
+    local url='https://raw.githubusercontent.com/nelson137/sys-setup/master'
+    eval curl -sS "$url/files/$1" ${2:+>"${2%/}/$1"}
+}
+
+
+
+dl_file_sudo() {
+    local url='https://raw.githubusercontent.com/nelson137/sys-setup/master'
+    eval curl -sS "$url/files/$1" | sudo tee "$2/$1" >/dev/null
+}
+
+
+
+dl_tool() {
+    local url='https://raw.githubusercontent.com/nelson137/sys-setup/master'
+    eval curl -sS "$url/tools/$1"
+}
 
 
 
@@ -43,7 +62,7 @@ pkgs() {
 
     # Install Etcher, Google Chrome, OBS, Spotify, Sublime Text, Teamviewer,
     # and Virtualbox
-    "${dir}/external-installs.sh"
+    dl_tool external-installs.sh | sudo bash -
 
     # Manually install youtube-dl because the repositories might be behind
     local url='https://yt-dl.org/downloads/latest/youtube-dl'
@@ -65,7 +84,7 @@ pkgs() {
 # Prevent screen tearing
 no_tear() {
     mkdir -p /etc/X11/xorg.conf.d/
-    sudo cp "${dir}/files/20-intel.conf" /etc/X11/xorg.conf.d/
+    dl_file_sudo 20-intel.conf /etc/X11/xorg.conf.d/
 }
 
 
@@ -82,7 +101,7 @@ power_settings() {
 
 # Use hybrid suspend to wake up quicker
 hybrid_suspend() {
-    sudo cp "${dir}/files/00-use-suspend-hybrid" /etc/pm/config.d/
+    dl_file_sudo 00-use-suspend-hybrid /etc/pm/config.d/
 }
 
 
@@ -90,7 +109,7 @@ hybrid_suspend() {
 # Don't suspend while ssh connections are open
 # https://bbs.archlinux.org/viewtopic.php?id=176876
 ssh_keep_awake() {
-    sudo cp "${dir}/files/ssh-keep-awake.service" /etc/systemd/system/
+    dl_file_sudo ssh-keep-awake.service /etc/systemd/system/
     sudo systemctl enable ssh-keep-awake.service
 }
 
@@ -104,7 +123,7 @@ ssh_motd() {
     # Disable welcome message
     sudo sed -ri 's/^(printf)/# \1/' /etc/update-motd.d/00-header
 
-    sudo cp "${dir}/files/01-pretty-header" /etc/update-motd.d/
+    dl_file_sudo 01-pretty-header /etc/update-motd.d/
 
     # Apply /etc/update-motd.d changes
     sudo run-parts /etc/update-motd.d/
@@ -121,9 +140,9 @@ ssh_motd() {
 # User and root crontabs
 crontabs() {
     # Set crontab editor to vim basic
-    cp "${dir}/files/.selected_editor" ~nelson/
+    dl_file .selected_editor ~nelson/
 
-    local comments="$(cat "${dir}/files/comments.crontab")"
+    local comments="$(dl_file comments.crontab)"
     local mailto="MAILTO=''"
 
     # User crontabs
@@ -131,7 +150,7 @@ crontabs() {
     # echo -e "${comments}\n\n${mailto}\n\n${u_tab}" | crontab -
 
     # Root crontabs
-    sudo cp "${dir}/files/pretty-header-data.sh" /root/
+    dl_file_sudo pretty-header-data.sh /root/
     sudo chmod +x /root/pretty-header-data.sh
     local p="'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'"
     local r_tab='*/10 * * * * /root/pretty-header-data.sh'
@@ -157,10 +176,10 @@ user() {
     # - Copy .gitconfig to ~nelson/
     # - Copy /usr/share/git-core/templates/ to ~nelson/.git_templates/
     # - Copy commit-msg to ~nelson/.git_templates/
-    cp "${dir}/files/.gitconfig" ~nelson/
+    dl_file .gitconfig ~nelson/
     sudo cp -r /usr/share/git-core/templates/ ~nelson/.git_templates/
     sudo chown -R nelson:nelson ~nelson/.git_templates/
-    cp "${dir}/files/commit-msg" ~nelson/.git_templates/hooks/
+    dl_file commit-msg ~nelson/.git_templates/hooks/
     chmod a+x ~nelson/.git_templates/hooks/commit-msg
 
     # Oh My Zsh

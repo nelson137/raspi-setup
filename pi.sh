@@ -1,6 +1,18 @@
 #!/bin/bash
 
-dir="$(dirname "$0")"
+
+
+dl_file() {
+    local url='https://raw.githubusercontent.com/nelson137/sys-setup/master'
+    eval curl -sS "$url/files/$1" ${2:+>"${2%/}/$1"}
+}
+
+
+
+dl_file_sudo() {
+    local url='https://raw.githubusercontent.com/nelson137/sys-setup/master'
+    eval curl -sS "$url/files/$1" | sudo tee "$2/$1" >/dev/null
+}
 
 
 
@@ -107,7 +119,7 @@ system() {
     local n="$(cat /etc/apache2/ports.conf | grep -n Listen | cut -d: -f1)"
     ((n++))
     sudo sed -i "${n}i Listen 6184"
-    sudo cp "$dir/files/shellinabox.conf" /etc/apache2/sites-available/
+    dl_file shellinabox.conf /etc/apache2/sites-available/
     sudo a2enmod proxy proxy_http
     sudo a2ensite shellinabox.conf
     sudo systemctl restart apache2.service
@@ -118,9 +130,9 @@ system() {
 # User and root crontabs
 crontabs() {
     # Set crontab editor to vim basic
-    cp "$dir/files/.selected_editor" ~nelson/
+    dl_file .selected_editor ~nelson/
 
-    local comments="$(< "$dir/files/comments.crontab")"
+    local comments="$(dl_file comments.crontab)"
     local mailto="MAILTO=''"
 
     # User crontab
@@ -130,7 +142,7 @@ crontabs() {
         sudo -u nelson crontab -
 
     # Root crontab
-    sudo cp "${dir}/files/pretty-header-data.sh" /root/
+    dl_file_sudo pretty-header-data.sh /root/
     sudo chmod +x /root/pretty-header-data.sh
     local p="'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'"
     local r_tab='*/10 * * * * /root/pretty-header-data.sh'
@@ -149,9 +161,9 @@ user() {
     # - Copy .gitconfig to ~nelson/
     # - Copy /usr/share/git-core/templates/ to ~nelson/.git_templates/
     # - Copy commit-msg to ~nelson/.git_templates/
-    cp "$dir/files/.gitconfig" ~nelson/
+    dl_file .gitconfig ~nelson/
     sudo cp -r /usr/share/git-core/templates/ ~nelson/.git_templates/
-    cp "$dir/files/commit-msg" ~nelson/.git_templates/hooks/
+    dl_file commit-msg ~nelson/.git_templates/hooks/
     chmod a+x ~nelson/.git_templates/hooks/commit-msg
 
     # Oh My Zsh
@@ -163,7 +175,7 @@ user() {
     # - Remove widgets from the lxpanel
     # - Remove cached menu items so updates will appear
     # - Restart lxpanel
-    cp "$dir/files/panel" ~nelson/.config/lxpanel/LXDE-pi/panels/
+    dl_file panel ~nelson/.config/lxpanel/LXDE-pi/panels/
     killall lxpanel
     find ~nelson/.cache/menus -type f -name '*' -print0 | xargs -0 rm
     nohup lxpanel -p LXDE-pi &>/dev/null & disown
