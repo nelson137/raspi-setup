@@ -1,1 +1,1 @@
-# raspi-setup
+# setup

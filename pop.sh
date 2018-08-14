@@ -8,21 +8,21 @@ fi
 
 
 dl_file() {
-    local url='https://raw.githubusercontent.com/nelson137/sys-setup/master'
+    local url='https://raw.githubusercontent.com/nelson137/setup/master'
     eval curl -sS "$url/files/$1" ${2:+>"${2%/}/$1"}
 }
 
 
 
 dl_file_sudo() {
-    local url='https://raw.githubusercontent.com/nelson137/sys-setup/master'
+    local url='https://raw.githubusercontent.com/nelson137/setup/master'
     eval curl -sS "$url/files/$1" | sudo tee "$2/$1" >/dev/null
 }
 
 
 
 dl_tool() {
-    local url='https://raw.githubusercontent.com/nelson137/sys-setup/master'
+    local url='https://raw.githubusercontent.com/nelson137/setup/master'
     eval curl -sS "$url/tools/$1"
 }
 
