@@ -124,9 +124,10 @@ crontabs() {
     local mailto="MAILTO=''"
 
     # User crontab
-    local dot="-C dot='~/Projects/Git/dot'"
-    local u_tab='0 5 * * * [[ $(git "$dot" status -s) ]] || git "$dot" pull'
-    echo -e "${comments}\n\n${mailto}\n\n${dot}\n${u_tab}" | crontab -
+    local dot="dot='-C ~/Projects/Git/dot'"
+    local u_tab='0 5 * * * [[ $(git $dot status -s) ]] || git $dot pull'
+    echo -e "${comments}\n\n${mailto}\n\n${dot}\n${u_tab}" |
+        sudo -u nelson crontab -
 
     # Root crontab
     sudo cp "${dir}/files/pretty-header-data.sh" /root/
