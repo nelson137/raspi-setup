@@ -46,9 +46,6 @@ pkgs() {
 
     # Update and upgrade
     sudo apt update
-    sudo apt-get dist-upgrade ||
-        sudo apt-get dist-upgrade --fix-missing
-    sudo apt upgrade -y
 
     sudo apt purge -y openssh-server
 
@@ -71,15 +68,6 @@ pkgs() {
 system() {
     # Timezone
     sudo timedatectl set-timezone America/Chicago
-
-    # Locale
-    sudo sed -ri 's/^\s*([^#]+)$/# \1/' /etc/locale.gen
-    sudo sed -ri 's/^# (en_US\.UTF-8 UTF-8)$/\1/' /etc/locale.gen
-    sudo locale-gen
-    sudo sed -i '/LANG/ s/GB/US/' /etc/default/locale
-
-    # Keyboard layout
-    sudo cp "${dir}/files/keyboard" /etc/default/keyboard
 
     # Don't autologin
     sudo sed -ri 's/^(autologin-user=)/#\1/' /etc/lightdm/lightdm.conf
