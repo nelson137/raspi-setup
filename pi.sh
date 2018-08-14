@@ -206,7 +206,7 @@ git_ssh_key() {
     local ssh_key="$(sudo cat ~nelson/.ssh/id_rsa.pub)"
     for id in "${key_ids[@]}"; do
         local json="$(curl_git "/user/keys/$id" | awk '/^\{/,/^\}/')"
-        if [[ $(jq -r '.title' <<< "$json") == Pi ]]; then
+        if [[ "$(jq -r '.title' <<< "$json")" == Pi ]]; then
             curl_git "/user/keys/$id" -X DELETE
             curl_git '/user/keys' -d '{ "title": "Pi", "key": "'"$ssh_key"'" }'
             break
