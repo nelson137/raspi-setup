@@ -44,9 +44,9 @@ pkgs() {
     # Pip installations
     sudo -u nelson pip install flake8 flake8-docstrings isort pycodestyle
 
-    # Make sure apt-add-repository is installed
+    # Make sure add-apt-repository is installed
     which add-apt-repository >/dev/null ||
-        sudo apt install -y apt-add-repository
+        sudo apt install -y software-properties-common
 
     # PPAs
     sudo add-apt-repository -y ppa:nextcloud-devs/client
