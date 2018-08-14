@@ -84,9 +84,8 @@ system() {
     # - Make shellinabox css file names more standardized
     # - Enable white-on-black (fg-on-bg) and color-terminal
     # - Restart shellinabox service
-    local old_cwd="$(pwd)"
-    local siab_args='--no-beep --disable-ssl --localhost-only'
-    sudo sed -i "s/--no-beep/${siab_args}/" /etc/default/shellinabox
+    sudo sed -i "s/--no-beep/--no-beep --disable-ssl --localhost-only/" \
+        /etc/default/shellinabox
     cd /etc/shellinabox/options-enabled
     sudo rm *.css
     cd ../options-available
@@ -98,7 +97,6 @@ system() {
     sudo ln -s '../options-available/00+white-on-black.css' .
     sudo ln -s '../options-available/01+color-terminal.css' .
     sudo systemctl restart shellinabox.service
-    cd "$old_cwd"
 
     # Apache2
     # - Add another Listen command (below the first one) in ports.conf
@@ -109,7 +107,7 @@ system() {
     local n="$(cat /etc/apache2/ports.conf | grep -n Listen | cut -d: -f1)"
     ((n++))
     sudo sed -i "${n}i Listen 6184"
-    sudo cp "${dir}/files/shellinabox.conf" /etc/apache2/sites-available/
+    sudo cp "$dir/files/shellinabox.conf" /etc/apache2/sites-available/
     sudo a2enmod proxy proxy_http
     sudo a2ensite shellinabox.conf
     sudo systemctl restart apache2.service
@@ -120,9 +118,9 @@ system() {
 # User and root crontabs
 crontabs() {
     # Set crontab editor to vim basic
-    cp "${dir}/files/.selected_editor" ~nelson/
+    cp "$dir/files/.selected_editor" ~nelson/
 
-    local comments="$(cat "${dir}/files/comments.crontab")"
+    local comments="$(< "$dir/files/comments.crontab")"
     local mailto="MAILTO=''"
 
     # User crontab
@@ -144,17 +142,15 @@ crontabs() {
 user() {
     # User directory
     mkdir -p ~nelson/{Downloads,Projects/Git}
-    chown -R nelson:nelson ~nelson/
     git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
 
     # git
     # - Copy .gitconfig to ~nelson/
     # - Copy /usr/share/git-core/templates/ to ~nelson/.git_templates/
     # - Copy commit-msg to ~nelson/.git_templates/
-    cp "${dir}/files/.gitconfig" ~nelson/
+    cp "$dir/files/.gitconfig" ~nelson/
     sudo cp -r /usr/share/git-core/templates/ ~nelson/.git_templates/
-    sudo chown -R nelson:nelson ~nelson/.git_templates/
-    cp "${dir}/files/commit-msg" ~nelson/.git_templates/hooks/
+    cp "$dir/files/commit-msg" ~nelson/.git_templates/hooks/
     chmod a+x ~nelson/.git_templates/hooks/commit-msg
 
     # Oh My Zsh
@@ -166,10 +162,10 @@ user() {
     # - Remove widgets from the lxpanel
     # - Remove cached menu items so updates will appear
     # - Restart lxpanel
-    cp "${dir}/files/panel" ~nelson/.config/lxpanel/LXDE-pi/panels/
+    cp "$dir/files/panel" ~nelson/.config/lxpanel/LXDE-pi/panels/
     killall lxpanel
     find ~nelson/.cache/menus -type f -name '*' -print0 | xargs -0 rm
-    nohup lxpanel -p LXDE & disown
+    nohup lxpanel -p LXDE &>/dev/null & disown
 
     # LXTerminal
     # - Use the xterm color palette
@@ -206,10 +202,10 @@ git_ssh_key() {
     local -a key_ids=(
         $(curl_git '/users/nelson137/keys' | awk '/^\[/,/^\]/' | jq '.[].id')
     )
-    local ssh_key="$(cat ~nelson/.ssh/id_rsa.pub)"
+    local ssh_key="$(< ~nelson/.ssh/id_rsa.pub)"
     for id in "${key_ids[@]}"; do
         local json="$(curl_git "/user/keys/$id" | awk '/^\{/,/^\}/')"
-        if [[ $(echo "$json" | jq -r '.title') == Pi ]]; then
+        if [[ $(jq -r '.title' <<< "$json") == Pi ]]; then
             curl_git "/user/keys/$id" -X DELETE
             curl_git '/user/keys' -d '{ "title": "Pi", "key": "'"$ssh_key"'" }'
             break
