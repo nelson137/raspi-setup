@@ -39,7 +39,7 @@ pkgs() {
     sudo apt install -y boxes build-essential cmake dnsutils figlet git \
         html-xml-utils i3 i3blocks jq libsecret-tools lolcat nextcloud-client \
         nmap nodejs openssh-server phantomjs pylint python3-pip python3-tk \
-        shellinabox tmux upower vim vlc w3m zsh
+        tmux upower vim vlc w3m zsh
 
     # Install Etcher, Google Chrome, OBS, Spotify, Sublime Text, Teamviewer,
     # and Virtualbox
