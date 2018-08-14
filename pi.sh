@@ -166,15 +166,15 @@ user() {
     cp "$dir/files/panel" ~nelson/.config/lxpanel/LXDE-pi/panels/
     killall lxpanel
     find ~nelson/.cache/menus -type f -name '*' -print0 | xargs -0 rm
-    nohup lxpanel -p LXDE &>/dev/null & disown
+    nohup lxpanel -p LXDE-pi &>/dev/null & disown
 
     # LXTerminal
     # - Use the xterm color palette
     # - Cursor blinks
     # - Hide scroll bar
     local conf_file=~nelson/.config/lxterminal/lxterminal.conf
-    sed -i '/^color_preset=/ s/VGA/xterm/' "$conf_file"
-    sed -i '/^cursorblinks=/ s/false/true/' "$conf_file"
+    sed -i '/^color_preset=/ s/VGA/xterm/; /^cursorblinks=/ s/false/true/' \
+        "$conf_file"
 
     # Make sure all files and directories are owned by nelson
     sudo chown -R nelson:nelson ~nelson
