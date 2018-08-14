@@ -12,22 +12,17 @@ cache_passwds() {
 
 
 
-# Make new user
-mk_user() {
-    sudo useradd nelson -mc 'Nelson Earle' -UG pi,adm,sudo,users
-}
+# Setup users and groups
+users_groups() {
+    # Create new user
+    sudo useradd nelson -mc 'Nelson Earle' -UG \
+        adm,audio,cdrom,dialout,gpio,i2c,netdev,pi,plugdev,spi,sudo,users,video
 
-
-
-# Set new passwords for root, pi, and nelson
-set_passwds() {
-    local root pi nelson
-
-    read -rp 'New password for root: ' root
-    read -rp 'New password for pi: ' pi
-    read -rp 'New password for nelson: ' nelson
-
-    echo -e "root:${root}\npi:${pi}\nnelson:${nelson}" | sudo chpasswd
+    # Change root and new users's passwords
+    local root_p nelson_p
+    read -rp 'New password for root: ' root_p
+    read -rp 'New password for nelson: ' nelson_p
+    echo "root:$root_p\nnelson:$nelson_p" | sudo chpasswd
 }
 
 
@@ -226,8 +221,7 @@ git_ssh_key() {
 
 
 cache_passwds
-mk_user
-set_passwds
+users_groups
 pkgs
 system
 crontabs
