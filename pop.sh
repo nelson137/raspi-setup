@@ -42,21 +42,21 @@ pkgs() {
     sudo su nelson pip3 install flake8 flake8-docstrings isort pycodestyle
 
     # Update and upgrade
-    sudo apt update
+    sudo apt-get update
     sudo apt-get dist-upgrade ||
         sudo apt-get dist-upgrade --fix-missing
-    sudo apt upgrade -y
+    sudo apt-get upgrade -y
 
     # Make sure add-apt-repository is installed
     which add-apt-repository >/dev/null ||
-        sudo apt install -y software-properties-common
+        sudo apt-get install -y software-properties-common
 
     # PPAs
     sudo add-apt-repository -y ppa:nextcloud-devs/client
 
     # Installations
-    sudo apt install -y boxes build-essential compton cmake dnsutils figlet \
-        git html-xml-utils i3 i3blocks jq libsecret-tools lolcat \
+    sudo apt-get install -y boxes build-essential compton cmake dnsutils \
+        figlet git html-xml-utils i3 i3blocks jq libsecret-tools lolcat \
         nextcloud-client nmap nodejs openssh-server phantomjs pylint \
         python3-pip python3-tk tmux upower vim vlc w3m zsh
 

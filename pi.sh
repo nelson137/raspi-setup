@@ -49,21 +49,21 @@ pkgs() {
 
     # Make sure add-apt-repository is installed
     which add-apt-repository >/dev/null ||
-        sudo apt install -y software-properties-common
+        sudo apt-get install -y software-properties-common
 
     # PPAs
     sudo add-apt-repository -y ppa:nextcloud-devs/client
 
     # Update and upgrade
-    sudo apt update
+    sudo apt-get update
 
-    sudo apt purge -y openssh-server
+    sudo apt-get purge -y openssh-server
 
     # Installations
-    sudo apt install -y apache2 boxes build-essential cmake dnsutils figlet \
-        git html-xml-utils jq libsecret-tools lolcat nextcloud-client nmap \
-        nodejs openssh-server phantomjs python3-flask python3-pip shellinabox \
-        tmux upower vim w3m zsh
+    sudo apt-get install -y apache2 boxes build-essential cmake dnsutils \
+        figlet git html-xml-utils jq libsecret-tools lolcat nextcloud-client \
+        nmap nodejs openssh-server phantomjs python3-flask python3-pip \
+        shellinabox tmux upower vim w3m zsh
 
     # youtube-dl
     # Don't install from repositories because they are behind
