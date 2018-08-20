@@ -162,15 +162,15 @@ crontabs() {
 # User directory and environment
 user() {
     # File structure
-    mkdir -p ~nelson/{Downloads,Projects/Git}
-    git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
+    mkdir -p ~nelson/{Downloads,Projects}
+    git clone 'https://github.com/nelson137/dot.git' ~nelson/.dot
 
     # Config files
     local conf_files=(.vimrc .tmux.conf .zshrc .bashrc .bash_additions)
     for cf in "${conf_files[@]}"; do
-        ln -fs ~nelson/Projects/Git/dot/files/"$cf" ~nelson/
+        ln -fs ~nelson/.dot/files/"$cf" ~nelson/
     done
-    ln -fs ~nelson/Projects/Git/dot/i3 ~nelson/.config/
+    ln -fs ~nelson/.dot/i3 ~nelson/.config/
 
     # git
     # - Copy .gitconfig to ~nelson/

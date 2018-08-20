@@ -139,7 +139,7 @@ crontabs() {
     local mailto="MAILTO=''"
 
     # User crontab
-    local dot="dot='-C ~/Projects/Git/dot'"
+    local dot="dot='-C ~/.dot'"
     local u_tab='0 5 * * * [[ $(git $dot status -s) ]] || git $dot pull'
     echo -e "${comments}\n\n${mailto}\n\n${dot}\n${u_tab}" |
         sudo -u nelson crontab -
@@ -157,8 +157,8 @@ crontabs() {
 # User directory and environment
 user() {
     # User directory
-    mkdir -p ~nelson/{Downloads,Projects/Git}
-    git clone 'https://github.com/nelson137/dot.git' ~nelson/Projects/Git/dot
+    mkdir -p ~nelson/{Downloads,Projects}
+    git clone 'https://github.com/nelson137/dot.git' ~nelson/.dot
 
     # git
     # - Copy .gitconfig to ~nelson/
