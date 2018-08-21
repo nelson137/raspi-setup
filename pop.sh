@@ -154,7 +154,10 @@ user() {
     git clone 'https://github.com/nelson137/dot.git' ~nelson/.dot
 
     # Config files
-    local conf_files=(.vimrc .tmux.conf .zshrc .bashrc .bash_additions)
+    local conf_files=(
+        .zshrc .vimrc .tmux.conf .bashrc .bash_additions .bash_aliases
+        .bash_functions
+    )
     for cf in "${conf_files[@]}"; do
         ln -fs ~nelson/.dot/files/"$cf" ~nelson/
     done
@@ -219,11 +222,10 @@ git_ssh_key() {
 
 # Root directory
 root() {
-    sudo ln -fs ~nelson/.vimrc /root/
-    sudo ln -fs ~nelson/.bashrc /root/
-    sudo ln -fs ~nelson/.bash_additions /root/
-    sudo ln -fs ~nelson/.bash_aliases /root/
-    sudo ln -fs ~nelson/.bash_functions /root/
+    local files=(.bashrc .bash_additions .bash_aliases .bash_functions .vimrc)
+    for f in "${files[@]}"; do
+        sudo ln fs ~nelson/"$f" /root/
+    done
     sudo ln -fs ~nelson/bin /root/
 }
 
