@@ -64,28 +64,29 @@ pkgs() {
 
 # User directory and environment
 user() {
+    cd ~nelson
+
     # File structure
-    mkdir -p ~nelson/{Downloads,Projects}
-    git clone 'https://github.com/nelson137/dot.git' ~nelson/.dot
+    mkdir -p Downloads Projects .ssh
+    git clone 'https://github.com/nelson137/.dot.git'
 
     # Config files
     local conf_files=(.vimrc .tmux.conf .zshrc .bashrc .bash_additions)
     for cf in "${conf_files[@]}"; do
-        ln -fs ~nelson/.dot/files/"$cf" ~nelson/
+        ln -fs .dot/files/"$cf" .
     done
 
     # git
     # - Copy .gitconfig to ~nelson/
     # - Copy /usr/share/git-core/templates/ to ~nelson/.git_templates/
     # - Copy commit-msg to ~nelson/.git_templates/
-    dl_file .gitconfig ~nelson/
-    cp -r /usr/share/git-core/templates/ ~nelson/.git_templates/
-    dl_file commit-msg ~nelson/.git_templates/hooks/
-    chmod a+x ~nelson/.git_templates/hooks/commit-msg
+    dl_file .gitconfig .
+    cp -r /usr/share/git-core/templates/ .git_templates/
+    dl_file commit-msg .git_templates/hooks/
+    chmod a+x .git_templates/hooks/commit-msg
 
     # Oh My Zsh
-    local url='https://github.com/robbyrussell/oh-my-zsh.git'
-    git clone --depth=1 "$url" ~nelson/.oh-my-zsh
+    git clone --depth=1 'https://github.com/robbyrussell/oh-my-zsh.git'
     chsh -s /usr/bin/zsh nelson
 }
 
