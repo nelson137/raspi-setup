@@ -201,10 +201,7 @@ git_ssh_key() {
     yes y | ssh-keygen -t rsa -b 4096 -C 'nelson.earle137@gmail.com' \
         -f ~nelson/.ssh/id_rsa -N ''
 
-    # For each ssh key
-    # - Get more data about the key
-    # - If the key's title is Pi
-    #   - Delete it and upload the new one
+    # Find the old Pop SSH key, delete it, upload the new one
     local -a key_ids=(
         $(curl_git '/users/nelson137/keys' | awk '/^\[/,/^\]/' | jq '.[].id')
     )
