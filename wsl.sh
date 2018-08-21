@@ -38,8 +38,8 @@ pkgs() {
 
     # Installations
     apt-get install -y boxes build-essential cmake dnsutils figlet git \
-        html-xml-utils jq libsecret-tools lolcat nmap nodejs openssh-server \
-        phantomjs pylint python3-pip python3-tk tmux vim zsh
+        html-xml-utils jq libsecret-tools lolcat nmap nodejs phantomjs pylint \
+        python3-pip python3-tk tmux vim zsh
 
     # Manually install youtube-dl because the repositories might be behind
     local url='https://yt-dl.org/downloads/latest/youtube-dl'
@@ -57,27 +57,6 @@ pkgs() {
                 -o "/usr/share/figlet/${f}.flf"
         fi
     done
-}
-
-
-# Clean up SSH MOTD
-ssh_motd() {
-    # Disable motd-news in config file
-    sed -i '/^ENABLED/ s/1/0/' /etc/default/motd-news
-
-    # Disable welcome message
-    sed -ri 's/^(printf)/# \1/' /etc/update-motd.d/00-header
-
-    dl_file 01-pretty-header /etc/update-motd.d/
-
-    # Apply /etc/update-motd.d changes
-    run-parts /etc/update-motd.d/
-
-    # Disable last login message
-    sed -ri 's/^\s*#?\s*(PrintLastLog).*$/\1 no/' /etc/ssh/sshd_config
-    systemctl restart ssh.service
-
-    # pretty-header-data.sh setup in "Root crontabs" in crontabs()
 }
 
 
@@ -156,7 +135,6 @@ cleanup() {
 
 cache_passwds
 pkgs
-ssh_motd
 user
 git_ssh_key
 root
