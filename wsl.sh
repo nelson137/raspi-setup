@@ -22,8 +22,8 @@ cache_passwds() {
 pkgs() {
     # Update and upgrade
     apt-get update
-    apt-get dist-upgrade ||
-        apt-get dist-upgrade --fix-missing
+    apt-get dist-upgrade -y ||
+        apt-get dist-upgrade -y --fix-missing
     apt-get upgrade -y
 
     # Make sure add-apt-repository is installed
