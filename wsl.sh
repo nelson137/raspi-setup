@@ -37,7 +37,7 @@ pkgs() {
     add-apt-repository -y ppa:nextcloud-devs/client
 
     # Nodejs 8 setup
-    curl -sL https://deb.nodesource.com/setup_8.x | bash -
+    curl -sSL https://deb.nodesource.com/setup_8.x | bash -
 
     # Installations
     apt-get install -y boxes build-essential cmake dnsutils figlet git \
@@ -75,7 +75,7 @@ ssh_motd() {
 
     # Disable last login message
     sed -ri 's/^\s*#?\s*(PrintLastLog).*$/\1 no/' /etc/ssh/sshd_config
-    systemctl restart sshd.service
+    systemctl restart ssh.service
 
     # pretty-header-data.sh setup in "Root crontabs" in crontabs()
 }
@@ -99,7 +99,6 @@ user() {
     # - Copy commit-msg to ~nelson/.git_templates/
     dl_file .gitconfig ~nelson/
     cp -r /usr/share/git-core/templates/ ~nelson/.git_templates/
-    chown -R nelson:nelson ~nelson/.git_templates/
     dl_file commit-msg ~nelson/.git_templates/hooks/
     chmod a+x ~nelson/.git_templates/hooks/commit-msg
 
@@ -141,12 +140,17 @@ git_ssh_key() {
 
 # Root directory
 root() {
-    ln -fs ~nelson/.vimrc /root/
-    ln -fs ~nelson/.bashrc /root/
-    ln -fs ~nelson/.bash_additions /root/
-    ln -fs ~nelson/.bash_aliases /root/
-    ln -fs ~nelson/.bash_functions /root/
+    local files=(.bashrc .bash_additions .bash_aliases .bash_functions .vimrc)
+    for f in "${files[@]}"; do
+        ln fs ~nelson/"$f" /root/
+    done
     ln -fs ~nelson/bin /root/
+}
+
+
+cleanup() {
+    # Make sure all files in ~nelson are owned by the user nelson
+    chown -R nelson:nelson ~nelson/.git_templates/
 }
 
 
@@ -156,3 +160,4 @@ ssh_motd
 user
 git_ssh_key
 root
+cleanup
