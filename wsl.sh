@@ -14,7 +14,7 @@ dl_file() {
 
 # Cache passwords
 cache_passwds() {
-    read -rp 'Github password: ' GITHUB_PASSWD
+    read -srp 'Github password: ' GITHUB_PASSWD
 }
 
 

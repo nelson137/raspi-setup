@@ -27,7 +27,7 @@ dl_tool() {
 # Cache passwords
 cache_passwds() {
     sudo echo >/dev/null
-    read -rp 'Github password: ' GITHUB_PASSWD
+    read -srp 'Github password: ' GITHUB_PASSWD
 }
 
 
