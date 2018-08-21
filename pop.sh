@@ -49,6 +49,9 @@ pkgs() {
     # PPAs
     sudo add-apt-repository -y ppa:nextcloud-devs/client
 
+    # Nodejs 8 setup
+    curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
+
     # Installations
     sudo apt-get install -y boxes build-essential compton cmake dnsutils \
         figlet git html-xml-utils i3 i3blocks jq libsecret-tools lolcat \
