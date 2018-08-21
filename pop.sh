@@ -166,7 +166,6 @@ user() {
     # - Copy commit-msg to ~nelson/.git_templates/
     dl_file .gitconfig ~nelson/
     sudo cp -r /usr/share/git-core/templates/ ~nelson/.git_templates/
-    sudo chown -R nelson:nelson ~nelson/.git_templates/
     dl_file commit-msg ~nelson/.git_templates/hooks/
     chmod a+x ~nelson/.git_templates/hooks/commit-msg
 
@@ -232,6 +231,12 @@ root() {
 }
 
 
+cleanup() {
+    # Make sure all files and directories in ~nelson are owned by nelson
+    sudo chown -R nelson:nelson ~nelson/
+}
+
+
 cache_passwds
 pkgs
 no_tear
@@ -243,3 +248,4 @@ crontabs
 user
 git_ssh_key
 root
+cleanup

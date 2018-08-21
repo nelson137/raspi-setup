@@ -185,9 +185,6 @@ user() {
     local conf_file=~nelson/.config/lxterminal/lxterminal.conf
     sed -i '/^color_preset=/ s/VGA/xterm/; /^cursorblinks=/ s/false/true/' \
         "$conf_file"
-
-    # Make sure all files and directories are owned by nelson
-    sudo chown -R nelson:nelson ~nelson
 }
 
 
@@ -224,6 +221,12 @@ git_ssh_key() {
 }
 
 
+cleanup() {
+    # Make sure all files and directories in ~nelson are owned by nelson
+    sudo chown -R nelson:nelson ~nelson/
+}
+
+
 cache_passwds
 users_groups
 pkgs
@@ -231,3 +234,4 @@ system
 crontabs
 user
 git_ssh_key
+cleanup

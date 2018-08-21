@@ -149,8 +149,8 @@ root() {
 
 
 cleanup() {
-    # Make sure all files in ~nelson are owned by the user nelson
-    chown -R nelson:nelson ~nelson/.git_templates/
+    # Make sure all files and directories in ~nelson are owned by nelson
+    chown -R nelson:nelson ~nelson/
 }
 
 
