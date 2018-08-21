@@ -58,7 +58,7 @@ pkgs() {
     sudo apt-get install -y apache2 boxes build-essential cmake dnsutils \
         figlet git html-xml-utils jq libsecret-tools lolcat nextcloud-client \
         nmap nodejs openssh-server phantomjs python3-flask python3-pip \
-        shellinabox tmux upower vim w3m zsh
+        shellinabox tmux upower vim w3m zip zsh
 
     # youtube-dl
     # Don't install from repositories because they are behind
