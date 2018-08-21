@@ -33,9 +33,6 @@ cache_passwds() {
 
 # Update, upgrade, and install packages
 pkgs() {
-    # Pip installations
-    sudo su nelson pip3 install flake8 flake8-docstrings isort pycodestyle
-
     # Update and upgrade
     sudo apt-get update
     sudo apt-get dist-upgrade ||
@@ -66,6 +63,9 @@ pkgs() {
     local url='https://yt-dl.org/downloads/latest/youtube-dl'
     sudo curl -sSL "$url" -o /usr/local/bin/youtube-dl
     sudo chmod a+rx /usr/local/bin/youtube-dl
+
+    # Pip installations
+    sudo su nelson pip3 install flake8 flake8-docstrings isort pycodestyle
 
     # Install figlet font files
     local -a fonts=(banner3 colossal nancyj roman univers)

@@ -39,9 +39,6 @@ users_groups() {
 
 # Update, upgrade, install, and reinstall packages
 pkgs() {
-    # Pip installations
-    sudo -u nelson pip install flake8 flake8-docstrings isort pycodestyle
-
     # Update and upgrade
     sudo apt-get update
 
@@ -68,6 +65,9 @@ pkgs() {
     local url='https://yt-dl.org/downloads/latest/youtube-dl'
     sudo curl -sSL "$url" -o /usr/local/bin/youtube-dl
     sudo chmod a+rx /usr/local/bin/youtube-dl
+
+    # Pip installations
+    sudo -u nelson pip install flake8 flake8-docstrings isort pycodestyle
 }
 
 
