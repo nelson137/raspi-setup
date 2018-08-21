@@ -1,12 +1,10 @@
 #!/bin/bash
 
 
-
 dl_file() {
     local url='https://raw.githubusercontent.com/nelson137/setup/master'
     eval curl -sS "$url/files/$1" ${2:+>"${2%/}/$1"}
 }
-
 
 
 dl_file_sudo() {
@@ -15,14 +13,12 @@ dl_file_sudo() {
 }
 
 
-
 # Cache passwords
 cache_passwds() {
     sudo echo >/dev/null
     read -srp 'Github password: ' GITHUB_PASSWD
     echo
 }
-
 
 
 # Setup users and groups
@@ -39,7 +35,6 @@ users_groups() {
     echo
     echo "root:$root_p\nnelson:$nelson_p" | sudo chpasswd
 }
-
 
 
 # Update, upgrade, install, and reinstall packages
@@ -71,7 +66,6 @@ pkgs() {
     sudo curl -sSL "$url" -o /usr/local/bin/youtube-dl
     sudo chmod a+rx /usr/local/bin/youtube-dl
 }
-
 
 
 # System config
@@ -129,7 +123,6 @@ system() {
 }
 
 
-
 # User and root crontabs
 crontabs() {
     # Set crontab editor to vim basic
@@ -151,7 +144,6 @@ crontabs() {
     local r_tab='*/10 * * * * /root/pretty-header-data.sh'
     echo -e "${comments}\n\nPATH=${p}\n${mailto}\n\n${r_tab}" | sudo crontab -
 }
-
 
 
 # User directory and environment
@@ -196,7 +188,6 @@ user() {
 }
 
 
-
 # Generate a new SSH key, replace the old Github key with the new one
 git_ssh_key() {
     curl_git() {
@@ -228,7 +219,6 @@ git_ssh_key() {
         fi
     done
 }
-
 
 
 cache_passwds

@@ -6,12 +6,10 @@ if [[ "$UID" == 0 ]]; then
 fi
 
 
-
 dl_file() {
     local url='https://raw.githubusercontent.com/nelson137/setup/master'
     eval curl -sS "$url/files/$1" ${2:+>"${2%/}/$1"}
 }
-
 
 
 dl_file_sudo() {
@@ -20,12 +18,10 @@ dl_file_sudo() {
 }
 
 
-
 dl_tool() {
     local url='https://raw.githubusercontent.com/nelson137/setup/master'
     eval curl -sS "$url/tools/$1"
 }
-
 
 
 # Cache passwords
@@ -33,7 +29,6 @@ cache_passwds() {
     sudo echo >/dev/null
     read -rp 'Github password: ' GITHUB_PASSWD
 }
-
 
 
 # Update, upgrade, and install packages
@@ -80,13 +75,11 @@ pkgs() {
 }
 
 
-
 # Prevent screen tearing
 no_tear() {
     mkdir -p /etc/X11/xorg.conf.d/
     dl_file_sudo 20-intel.conf /etc/X11/xorg.conf.d/
 }
-
 
 
 # Use gsettings to set power settings
@@ -98,12 +91,10 @@ power_settings() {
 }
 
 
-
 # Use hybrid suspend to wake up quicker
 hybrid_suspend() {
     dl_file_sudo 00-use-suspend-hybrid /etc/pm/config.d/
 }
-
 
 
 # Don't suspend while ssh connections are open
@@ -112,7 +103,6 @@ ssh_keep_awake() {
     dl_file_sudo ssh-keep-awake.service /etc/systemd/system/
     sudo systemctl enable ssh-keep-awake.service
 }
-
 
 
 # Clean up SSH MOTD
@@ -136,7 +126,6 @@ ssh_motd() {
 }
 
 
-
 # User and root crontabs
 crontabs() {
     # Set crontab editor to vim basic
@@ -156,7 +145,6 @@ crontabs() {
     local r_tab='*/10 * * * * /root/pretty-header-data.sh'
     echo -e "${comments}\n\nPATH=${p}\n${mailto}\n\n${r_tab}" | sudo crontab -
 }
-
 
 
 # User directory and environment
@@ -201,7 +189,6 @@ user() {
 }
 
 
-
 # Generate a new SSH key, replace the old Github key with the new one
 git_ssh_key() {
     curl_git() {
@@ -243,7 +230,6 @@ root() {
     sudo ln -fs ~nelson/.bash_functions /root/
     sudo ln -fs ~nelson/bin /root/
 }
-
 
 
 cache_passwds

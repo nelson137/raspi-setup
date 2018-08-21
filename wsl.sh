@@ -6,12 +6,10 @@ if [[ "$UID" == 0 ]]; then
 fi
 
 
-
 dl_file() {
     local url='https://raw.githubusercontent.com/nelson137/setup/master'
     eval curl -sS "$url/files/$1" ${2:+>"${2%/}/$1"}
 }
-
 
 
 dl_file_sudo() {
@@ -20,13 +18,11 @@ dl_file_sudo() {
 }
 
 
-
 # Cache passwords
 cache_passwds() {
     sudo echo >/dev/null
     read -rp 'Github password: ' GITHUB_PASSWD
 }
-
 
 
 # Update, upgrade, and install packages
@@ -71,7 +67,6 @@ pkgs() {
 }
 
 
-
 # Clean up SSH MOTD
 ssh_motd() {
     # Disable motd-news in config file
@@ -91,7 +86,6 @@ ssh_motd() {
 
     # pretty-header-data.sh setup in "Root crontabs" in crontabs()
 }
-
 
 
 # User directory and environment
@@ -121,7 +115,6 @@ user() {
     git clone --depth=1 "$url" ~nelson/.oh-my-zsh
     sudo chsh -s /usr/bin/zsh nelson
 }
-
 
 
 # Generate a new SSH key, replace the old Github key with the new one
@@ -162,7 +155,6 @@ root() {
     sudo ln -fs ~nelson/.bash_functions /root/
     sudo ln -fs ~nelson/bin /root/
 }
-
 
 
 cache_passwds
