@@ -42,6 +42,9 @@ pkgs() {
     # Pip installations
     sudo -u nelson pip install flake8 flake8-docstrings isort pycodestyle
 
+    # Update and upgrade
+    sudo apt-get update
+
     # Make sure add-apt-repository is installed
     which add-apt-repository >/dev/null ||
         sudo apt-get install -y software-properties-common
@@ -49,8 +52,8 @@ pkgs() {
     # PPAs
     sudo add-apt-repository -y ppa:nextcloud-devs/client
 
-    # Update and upgrade
-    sudo apt-get update
+    # Nodejs 8 setup
+    curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
 
     sudo apt-get purge -y openssh-server
 
