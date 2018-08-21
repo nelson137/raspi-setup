@@ -47,7 +47,9 @@ pkgs() {
     chmod a+rx /usr/local/bin/youtube-dl
 
     # Pip installations
-    su nelson pip3 install flake8 flake8-docstrings isort pycodestyle
+    su -c 'python3 -m pip install --upgrade pip' nelson
+    su -c '~nelson/.local/bin/pip3 install --user --no-warn-script-location \
+        flake8 flake8-docstrings isort pycodestyle' nelson
 
     # Install figlet font files
     local -a fonts=(banner3 colossal nancyj roman univers)
