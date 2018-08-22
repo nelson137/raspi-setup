@@ -71,10 +71,14 @@ user() {
     git clone 'https://github.com/nelson137/.dot.git'
 
     # Config files
-    local conf_files=(.vimrc .tmux.conf .zshrc .bashrc .bash_additions)
+    local conf_files=(
+        .vimrc .tmux.conf .zshrc .bashrc .bash_additions .bash_aliases
+        .bash_functions
+    )
     for cf in "${conf_files[@]}"; do
         ln -fs .dot/files/"$cf" .
     done
+    ln -fs .dot/bin .
 
     # git
     # - Copy .gitconfig to ~nelson/
