@@ -66,6 +66,9 @@ pkgs() {
     sudo curl -sSL "$url" -o /usr/local/bin/youtube-dl
     sudo chmod a+rx /usr/local/bin/youtube-dl
 
+    # Go installations
+    sudo su -c 'go get github.com/ericchiang/pup' nelson
+
     # Pip installations
     sudo -u nelson pip install flake8 flake8-docstrings isort pycodestyle
 }

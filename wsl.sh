@@ -46,6 +46,9 @@ pkgs() {
     curl -sSL "$url" -o /usr/local/bin/youtube-dl
     chmod a+rx /usr/local/bin/youtube-dl
 
+    # Go installations
+    su -c 'go get github.com/ericchiang/pup' nelson
+
     # Pip installations
     su -c 'python3 -m pip install --upgrade pip' nelson
     su -c '~nelson/.local/bin/pip3 install --user --no-warn-script-location \
