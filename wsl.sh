@@ -124,7 +124,7 @@ git_ssh_key() {
 root() {
     local files=(.bashrc .bash_additions .bash_aliases .bash_functions .vimrc)
     for f in "${files[@]}"; do
-        ln fs ~nelson/"$f" /root/
+        ln -fs ~nelson/"$f" /root/
     done
     ln -fs ~nelson/bin /root/
 }
