@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [[ "$EUID" != 0 ]]; then
+    echo "Script must be run as root. Try 'sudo $0'" >&2
+    exit 1
+fi
+
 
 dl_file() {
     local url='https://raw.githubusercontent.com/nelson137/setup/master'
@@ -7,15 +12,8 @@ dl_file() {
 }
 
 
-dl_file_sudo() {
-    local url='https://raw.githubusercontent.com/nelson137/setup/master'
-    eval curl -sS "$url/files/$1" | sudo tee "$2/$1" >/dev/null
-}
-
-
 # Cache passwords
 cache_passwds() {
-    sudo echo >/dev/null
     read -srp 'Github password: ' GITHUB_PASSWD
     echo
 }
@@ -24,7 +22,7 @@ cache_passwds() {
 # Setup users and groups
 users_groups() {
     # Create new user
-    sudo useradd nelson -mc 'Nelson Earle' -UG \
+    useradd nelson -mc 'Nelson Earle' -UG \
         adm,audio,cdrom,dialout,gpio,i2c,netdev,pi,plugdev,spi,sudo,users,video
 
     # Change root and new users's passwords
@@ -33,54 +31,56 @@ users_groups() {
     echo
     read -srp 'New password for nelson: ' nelson_p
     echo
-    echo "root:$root_p\nnelson:$nelson_p" | sudo chpasswd
+    echo "root:$root_p\nnelson:$nelson_p" | chpasswd
 }
 
 
 # Update, upgrade, install, and reinstall packages
 pkgs() {
     # Update and upgrade
-    sudo apt-get update
+    apt-get update
 
     # Make sure add-apt-repository is installed
     which add-apt-repository >/dev/null ||
-        sudo apt-get install -y software-properties-common
+        apt-get install -y software-properties-common
 
     # PPAs
-    sudo add-apt-repository -y ppa:nextcloud-devs/client
+    add-apt-repository -y ppa:nextcloud-devs/client
 
     # Nodejs 8 setup
-    curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
+    curl -sL https://deb.nodesource.com/setup_8.x | bash -
 
-    sudo apt-get purge -y openssh-server
+    apt-get purge -y openssh-server
 
     # Installations
-    sudo apt-get install -y apache2 boxes build-essential cmake dnsutils \
-        figlet git golang-go html-xml-utils jq libsecret-tools lolcat \
+    apt-get install -y apache2 boxes build-essential cmake dnsutils figlet \
+        git golang-go html-xml-utils jq libsecret-tools lolcat \
         nextcloud-client nmap nodejs openssh-server phantomjs python3-flask \
         python3-pip shellinabox tmux upower vim w3m zip zsh
 
     # youtube-dl
     # Don't install from repositories because they are behind
     local url='https://yt-dl.org/downloads/latest/youtube-dl'
-    sudo curl -sSL "$url" -o /usr/local/bin/youtube-dl
-    sudo chmod a+rx /usr/local/bin/youtube-dl
+    curl -sSL "$url" -o /usr/local/bin/youtube-dl
+    chmod a+rx /usr/local/bin/youtube-dl
 
     # Go installations
-    sudo su -c 'go get github.com/ericchiang/pup' nelson
+    su -c 'go get github.com/ericchiang/pup' nelson
 
     # Pip installations
-    sudo -u nelson pip install flake8 flake8-docstrings isort pycodestyle
+    su -c 'python3 -m pip install --upgrade pip' nelson
+    su -c '~nelson/.local/bin/pip3 install --user --no-warn-script-location \
+        flake8 flake8-docstrings isort pycodestyle' nelson
 }
 
 
 # System config
 system() {
     # Timezone
-    sudo timedatectl set-timezone America/Chicago
+    timedatectl set-timezone America/Chicago
 
     # Don't autologin
-    sudo sed -ri 's/^(autologin-user=)/#\1/' /etc/lightdm/lightdm.conf
+    sed -ri 's/^(autologin-user=)/#\1/' /etc/lightdm/lightdm.conf
 
     # Disable splash screen on boot
     # - Remove arguments from the boot cmdline
@@ -90,28 +90,28 @@ system() {
     # Turn off bluetooth on boot
     # - Add rfkill block bluetooth to rc.local
     [[ ! -f /etc/rc.local ]] &&
-       echo -e "#!/bin/bash\n\nexit 0" | sudo tee /etc/rc.local >/dev/null
-    local line_n="$(sudo cat /etc/rc.local | grep -n exit | cut -d: -f1)"
-    sudo sed -i "${line_n}i rfkill block bluetooth\n" /etc/rc.local
+       echo -e "#!/bin/bash\n\nexit 0" > /etc/rc.local
+    local line_n="$(cat /etc/rc.local | grep -n exit | cut -d: -f1)"
+    sed -i "${line_n}i rfkill block bluetooth\n" /etc/rc.local
 
     # Shellinabox
     # - Add --disable-ssl and --localhost-only to SHELLINABOX_ARGS
     # - Make shellinabox css file names more standardized
     # - Enable white-on-black (fg-on-bg) and color-terminal
     # - Restart shellinabox service
-    sudo sed -i "s/--no-beep/--no-beep --disable-ssl --localhost-only/" \
+    sed -i "s/--no-beep/--no-beep --disable-ssl --localhost-only/" \
         /etc/default/shellinabox
     cd /etc/shellinabox/options-enabled
-    sudo rm *.css
+    rm *.css
     cd ../options-available
-    sudo mv '00+Black on White.css' '00_black-on-white.css'
-    sudo mv '00_White On Black.css' '00+white-on-black.css'
-    sudo mv '01+Color Terminal.css' '01+color-terminal.css'
-    sudo mv '01_Monochrome.css' '01_monochrome.css'
+    mv '00+Black on White.css' '00_black-on-white.css'
+    mv '00_White On Black.css' '00+white-on-black.css'
+    mv '01+Color Terminal.css' '01+color-terminal.css'
+    mv '01_Monochrome.css' '01_monochrome.css'
     cd ../options-enabled
-    sudo ln -s '../options-available/00+white-on-black.css' .
-    sudo ln -s '../options-available/01+color-terminal.css' .
-    sudo systemctl restart shellinabox.service
+    ln -s '../options-available/00+white-on-black.css' .
+    ln -s '../options-available/01+color-terminal.css' .
+    systemctl restart shellinabox.service
 
     # Apache2
     # - Add another Listen command (below the first one) in ports.conf
@@ -121,11 +121,11 @@ system() {
     # - Restart the apache2 service
     local n="$(cat /etc/apache2/ports.conf | grep -n Listen | cut -d: -f1)"
     ((n++))
-    sudo sed -i "${n}i Listen 6184"
+    sed -i "${n}i Listen 6184"
     dl_file shellinabox.conf /etc/apache2/sites-available/
-    sudo a2enmod proxy proxy_http
-    sudo a2ensite shellinabox.conf
-    sudo systemctl restart apache2.service
+    a2enmod proxy proxy_http
+    a2ensite shellinabox.conf
+    systemctl restart apache2.service
 }
 
 
@@ -141,14 +141,14 @@ crontabs() {
     local dot="dot='-C ~/.dot'"
     local u_tab='0 5 * * * [[ $(git $dot status -s) ]] || git $dot pull'
     echo -e "${comments}\n\n${mailto}\n\n${dot}\n${u_tab}" |
-        sudo -u nelson crontab -
+        su -c 'crontab -' nelson
 
     # Root crontab
-    dl_file_sudo pretty-header-data.sh /root/
-    sudo chmod +x /root/pretty-header-data.sh
+    dl_file pretty-header-data.sh /root/
+    chmod +x /root/pretty-header-data.sh
     local p="'/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'"
     local r_tab='*/10 * * * * /root/pretty-header-data.sh'
-    echo -e "${comments}\n\nPATH=${p}\n${mailto}\n\n${r_tab}" | sudo crontab -
+    echo -e "${comments}\n\nPATH=${p}\n${mailto}\n\n${r_tab}" | crontab -
 }
 
 
@@ -163,14 +163,14 @@ user() {
     # - Copy /usr/share/git-core/templates/ to ~nelson/.git_templates/
     # - Copy commit-msg to ~nelson/.git_templates/
     dl_file .gitconfig ~nelson/
-    sudo cp -r /usr/share/git-core/templates/ ~nelson/.git_templates/
+    cp -r /usr/share/git-core/templates/ ~nelson/.git_templates/
     dl_file commit-msg ~nelson/.git_templates/hooks/
     chmod a+x ~nelson/.git_templates/hooks/commit-msg
 
     # Oh My Zsh
     local url='https://github.com/robbyrussell/oh-my-zsh.git'
     git clone --depth=1 "$url" ~nelson/.oh-my-zsh
-    sudo chsh nelson -s /usr/bin/zsh
+    chsh nelson -s /usr/bin/zsh
 
     # LXPanel
     # - Remove widgets from the lxpanel
@@ -202,14 +202,15 @@ git_ssh_key() {
 
     # Generate SSH key
     local email='nelson.earle137@gmail.com'
-    echo y | sudo -u nelson ssh-keygen -t rsa -b 4096 -C "$email" \
-        -f ~nelson/.ssh/id_rsa -N ''
+    local cmd="ssh-keygen -t rsa -b 4096 -C '$email' -f ~nelson/.ssh/id_rsa \
+        -N ''"
+    echo y | su -c "$cmd" nelson
 
     # Find the old Pi SSH key, delete it, upload the new one
     local -a key_ids=(
         $(curl_git '/users/nelson137/keys' | awk '/^\[/,/^\]/' | jq '.[].id')
     )
-    local ssh_key="$(sudo cat ~nelson/.ssh/id_rsa.pub)"
+    local ssh_key="$(cat ~nelson/.ssh/id_rsa.pub)"
     for id in "${key_ids[@]}"; do
         local json="$(curl_git "/user/keys/$id" | awk '/^\{/,/^\}/')"
         if [[ "$(jq -r '.title' <<< "$json")" == Pi ]]; then
@@ -223,7 +224,7 @@ git_ssh_key() {
 
 cleanup() {
     # Make sure all files and directories in ~nelson are owned by nelson
-    sudo chown -R nelson:nelson ~nelson/
+    chown -R nelson:nelson ~nelson/
 }
 
 
