@@ -155,7 +155,7 @@ crontabs() {
 # User directory and environment
 user() {
     # User directory
-    mkdir -p ~nelson/{Downloads,Projects}
+    mkdir -p ~nelson/{Downloads,Projects/.ssh}
     git clone 'https://github.com/nelson137/.dot.git' ~nelson/.dot
 
     # git
