@@ -154,7 +154,7 @@ crontabs() {
 user() {
     # File structure
     mkdir -p ~nelson/{Downloads,Projects}
-    git clone 'https://github.com/nelson137/dot.git' ~nelson/.dot
+    git clone 'https://github.com/nelson137/.dot.git' ~nelson/.dot
 
     # Config files
     local conf_files=(

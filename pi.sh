@@ -153,7 +153,7 @@ crontabs() {
 user() {
     # User directory
     mkdir -p ~nelson/{Downloads,Projects}
-    git clone 'https://github.com/nelson137/dot.git' ~nelson/.dot
+    git clone 'https://github.com/nelson137/.dot.git' ~nelson/.dot
 
     # git
     # - Copy .gitconfig to ~nelson/
