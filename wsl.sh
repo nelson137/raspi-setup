@@ -38,8 +38,8 @@ pkgs() {
 
     # Installations
     apt-get install -y boxes build-essential cmake dnsutils figlet git \
-        html-xml-utils jq libsecret-tools lolcat nmap nodejs phantomjs pylint \
-        python3-pip python3-tk tmux vim zip zsh
+        golang-go html-xml-utils jq libsecret-tools lolcat nmap nodejs \
+        phantomjs pylint python3-pip python3-tk tmux vim zip zsh
 
     # Manually install youtube-dl because the repositories might be behind
     local url='https://yt-dl.org/downloads/latest/youtube-dl'

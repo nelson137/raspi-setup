@@ -51,8 +51,8 @@ pkgs() {
 
     # Installations
     sudo apt-get install -y boxes build-essential compton cmake dnsutils \
-        figlet git html-xml-utils i3 i3blocks jq libsecret-tools lolcat \
-        nextcloud-client nmap nodejs openssh-server phantomjs pylint \
+        figlet git golang-go html-xml-utils i3 i3blocks jq libsecret-tools \
+        lolcat nextcloud-client nmap nodejs openssh-server phantomjs pylint \
         python3-pip python3-tk tmux upower vim vlc w3m zip zsh
 
     # Install Etcher, Google Chrome, OBS, Spotify, Sublime Text, Teamviewer,
