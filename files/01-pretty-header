@@ -7,7 +7,8 @@ import os
 from datetime import datetime
 from random import choice, randint
 from re import search
-from subprocess import check_output
+from subprocess import DEVNULL, Popen, check_output
+from sys import stderr
 from tempfile import NamedTemporaryFile
 
 
@@ -140,8 +141,13 @@ def get_info_box():
     box_info = ''.join([e + '\n' for e in box_info])
 
     # Draw a box around info
-    cmd = 'echo "%s" | HOME=~ boxes -d parchment -p h2' % box_info
-    return check_output(cmd, shell=True).decode()
+    p = Popen(['which', 'boxes'], stdout=DEVNULL)
+    p.communicate()
+    if not p.returncode:
+        cmd = 'echo "%s" | HOME=~ boxes -d parchment -p h2' % box_info
+        return check_output(cmd, shell=True).decode(), ''
+    else:
+        return box_info, 'Warning: boxes is not installed\n'
 
 
 def zip_center(first, second):
@@ -188,23 +194,32 @@ def main():
         +-----------+
     """
     ascii_art = unify_len(get_ascii_art().split('\n'))
-    box = get_info_box().split('\n')
+    box, warn = get_info_box()
 
     # Combine ascii_art and box_str
-    output = ([a + '     ' + b for a, b in zip_center(ascii_art, box)])
+    output = ([a + '     ' + b for a, b in
+               zip_center(ascii_art, box.split('\n'))])
     output = '\n'.join(output)
 
     # Pick a random seed for lolcat from seeds
     seeds = [39, 49, 60]
     s = seeds[randint(0, len(seeds)-1)]
 
-    with NamedTemporaryFile() as tf:
-        # Write the output to a temp file
-        tf.write(output.encode('utf-8'))
-        tf.flush()
-        # Open the temp file for reading and direct it into lolcat
-        cmd = '/usr/games/lolcat -fS %s < %s' % (s, tf.name)
-        print(check_output(cmd, shell=True).decode(), end='')
+    p = Popen(['which', 'lolcat'], stdout=DEVNULL)
+    p.communicate()
+    if not p.returncode:
+        with NamedTemporaryFile() as tf:
+            # Write the output to a temp file
+            tf.write(output.encode('utf-8'))
+            tf.flush()
+            # Open the temp file for reading and direct it into lolcat
+            cmd = '/usr/games/lolcat -fS %s < %s' % (s, tf.name)
+            print(check_output(cmd, shell=True).decode(), end='')
+    else:
+        print(output)
+        warn = 'Warning: lolcat is not installed\n'
+
+    print(warn, end='', file=stderr)
 
 
 if __name__ == '__main__':
