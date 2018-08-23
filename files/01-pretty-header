@@ -122,7 +122,15 @@ def get_info_box():
           |   _________________|_
            \_/___________________/
     """
-    distro = check_output(['lsb_release', '-sd']).decode().strip()
+    # Use /etc/os-release to get distro name if it exists
+    if os.path.exists('/etc/os-release'):
+        with open('/etc/os-release', 'r') as f:
+            info = f.read().strip()
+        info = [e.split('=') for e in info.replace('"', '').split('\n')]
+        info = {var: val for var, val in info}
+        distro = info['PRETTY_NAME']
+    else:
+        distro = check_output(['lsb_release', '-sd']).decode().strip()
     hostname = socket.gethostname()
     int_ip = get_int_ips()
     with open('/etc/update-motd.d/pretty-header-ext-ip.txt', 'r') as f:
