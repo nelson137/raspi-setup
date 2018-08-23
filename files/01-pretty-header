@@ -4,6 +4,7 @@
 
 
 import os
+import socket
 from datetime import datetime
 from random import choice, randint
 from re import search
@@ -121,8 +122,8 @@ def get_info_box():
           |   _________________|_
            \_/___________________/
     """
-    distro = '$(lsb_release -sd)'
-    hostname = '$(hostname)'
+    distro = check_output(['lsb_release', '-sd']).decode().strip()
+    hostname = socket.gethostname()
     int_ip = get_int_ips()
     with open('/etc/update-motd.d/pretty-header-ext-ip.txt', 'r') as f:
         ext_ip = f.read().strip()
