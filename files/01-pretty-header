@@ -239,7 +239,7 @@ def main():
             print(check_output(cmd, shell=True).decode(), end='')
     else:
         print(output)
-        warn = 'Warning: lolcat is not installed\n'
+        warn += 'Warning: lolcat is not installed\n'
 
     print(warn, end='', file=stderr)
 
