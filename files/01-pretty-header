@@ -122,15 +122,27 @@ def get_info_box():
           |   _________________|_
            \_/___________________/
     """
-    # Use /etc/os-release to get distro name if it exists
+    warn = ''
+
+    # Try to get distro info from /etc/os-release
     if os.path.exists('/etc/os-release'):
         with open('/etc/os-release', 'r') as f:
             info = f.read().strip()
         info = [e.split('=') for e in info.replace('"', '').split('\n')]
         info = {var: val for var, val in info}
         distro = info['PRETTY_NAME']
+    # Try to get distro info from /etc/lsb-release
+    elif os.path.exists('/etc/lsb-release'):
+        with open('/etc/lsb-release', 'r') as f:
+            info = f.read().strip()
+        info = [e.split('=') for e in info.replace('"', '').split('\n')]
+        info = {var: val for var, val in info}
+        distro = info['DISTRIB_DESCRIPTION']
+    # Could not get distro info
     else:
-        distro = check_output(['lsb_release', '-sd']).decode().strip()
+        distro = ''
+        warn += 'Warning: could not get distro information\n'
+
     hostname = socket.gethostname()
     int_ip = get_int_ips()
     with open('/etc/update-motd.d/pretty-header-ext-ip.txt', 'r') as f:
@@ -154,9 +166,10 @@ def get_info_box():
     p.communicate()
     if not p.returncode:
         cmd = 'echo "%s" | HOME=~ boxes -d parchment -p h2' % box_info
-        return check_output(cmd, shell=True).decode(), ''
+        return check_output(cmd, shell=True).decode(), warn
     else:
-        return box_info, 'Warning: boxes is not installed\n'
+        warn += 'Warning: boxes is not installed\n'
+        return box_info, warn
 
 
 def zip_center(first, second):
