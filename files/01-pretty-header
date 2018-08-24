@@ -168,7 +168,7 @@ def get_info_box():
         cmd = 'echo "%s" | HOME=~ boxes -d parchment -p h2' % box_info
         return check_output(cmd, shell=True).decode(), warn
     else:
-        warn += 'Warning: boxes is not installed\n'
+        warn += 'Warning: could not find\n'
         return box_info, warn
 
 
@@ -227,6 +227,7 @@ def main():
     seeds = [39, 49, 60]
     s = seeds[randint(0, len(seeds)-1)]
 
+    # Try to colorize output
     p = Popen(['which', 'lolcat'], stdout=DEVNULL)
     p.communicate()
     if not p.returncode:
@@ -239,7 +240,7 @@ def main():
             print(check_output(cmd, shell=True).decode(), end='')
     else:
         print(output)
-        warn += 'Warning: lolcat is not installed\n'
+        warn += 'Warning: could not find lolcat\n'
 
     print(warn, end='', file=stderr)
 
