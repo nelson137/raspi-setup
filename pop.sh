@@ -41,7 +41,7 @@ pkgs() {
     sudo apt-get upgrade -y
 
     # Make sure add-apt-repository is installed
-    which add-apt-repository >/dev/null ||
+    which add-apt-repository &>/dev/null ||
         sudo apt-get install -y software-properties-common
 
     # PPAs

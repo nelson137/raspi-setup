@@ -6,7 +6,7 @@ w_sed='/Currently:/ s/.*: (.*): ([0-9]+)F.*/\2F, \1/p'
 curl -s "$w_url" | sed -rn "$w_sed" > /etc/update-motd.d/pretty-header-weather.txt
 
 # External ip
-if which dig >/dev/null; then
+if which dig &>/dev/null; then
     ext_ip="$(dig +short myip.opendns.com @resolver1.opendns.com)"
 else
     ext_ip="$(curl -s 'http://icanhazip.com')"
