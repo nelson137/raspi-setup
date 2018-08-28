@@ -156,8 +156,10 @@ crontabs() {
 
 # User directory and environment
 user() {
+    cd ~nelson
+
     # File structure
-    mkdir -p ~nelson/{Downloads,Projects}
+    mkdir -p Downloads Projects
     git clone 'https://github.com/nelson137/.dot.git' ~nelson/.dot
 
     # Config files
@@ -166,7 +168,7 @@ user() {
         .bash_functions
     )
     for cf in "${conf_files[@]}"; do
-        ln -fs ~nelson/.dot/files/"$cf" ~nelson/
+        ln -fs .dot/files/"$cf" .
     done
     ln -fs ~nelson/.dot/i3 ~nelson/.config/
 
