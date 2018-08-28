@@ -91,7 +91,7 @@ user() {
     # Vim
     # - Install Vundle
     # - Install all Vundle plugins
-    git clone https://github.com/VundleVim/Vundle.vim.git \
+    git clone 'https://github.com/VundleVim/Vundle.vim.git' \
         ~nelson/.vim/bundle/Vundle.vim
     vim +PluginInstall +qall
 
