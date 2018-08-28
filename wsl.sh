@@ -84,6 +84,17 @@ user() {
     done
     ln -fs .dot/bin .
 
+    # Oh My Zsh
+    git clone --depth=1 'https://github.com/robbyrussell/oh-my-zsh.git'
+    chsh -s /usr/bin/zsh nelson
+
+    # Vim
+    # - Install Vundle
+    # - Install all Vundle plugins
+    git clone https://github.com/VundleVim/Vundle.vim.git \
+        ~nelson/.vim/bundle/Vundle.vim
+    vim +PluginInstall +qall
+
     # git
     # - Copy .gitconfig to ~nelson/
     # - Copy /usr/share/git-core/templates/ to ~nelson/.git_templates/
@@ -92,10 +103,6 @@ user() {
     cp -r /usr/share/git-core/templates/ .git_templates/
     dl_file commit-msg .git_templates/hooks/
     chmod a+x .git_templates/hooks/commit-msg
-
-    # Oh My Zsh
-    git clone --depth=1 'https://github.com/robbyrussell/oh-my-zsh.git'
-    chsh -s /usr/bin/zsh nelson
 }
 
 
