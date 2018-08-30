@@ -127,12 +127,22 @@ def get_info_box():
 
     hostname = socket.gethostname()
     int_ip = get_int_ip()
-    with open('/etc/update-motd.d/pretty-header-ext-ip.txt', 'r') as f:
-        ext_ip = f.read().strip()
+    try:
+        with open('/etc/update-motd.d/pretty-header-ext-ip.txt', 'r') as f:
+            ext_ip = f.read().strip()
+    except FileNotFoundError:
+        ext_ip = ''
+        warn += 'Warning: /etc/update-motd.d/pretty-header-ext-ip.txt ' + \
+                'does not exist\n'
     time = datetime.now().time().strftime('%I:%M:%S %p')
     date = datetime.now().date().strftime('%a, %b %d, %Y')
-    with open('/etc/update-motd.d/pretty-header-weather.txt', 'r') as f:
-        weather = f.read().strip()
+    try:
+        with open('/etc/update-motd.d/pretty-header-weather.txt', 'r') as f:
+            weather = f.read().strip()
+    except FileNotFoundError:
+        weather = ''
+        warn += 'Warning: /etc/update-motd.d/pretty-header-weather.txt ' + \
+                'does not exist\n'
 
     box_info = ['Distro.....: %s' % distro,
                 'Hostname...: %s' % hostname,
