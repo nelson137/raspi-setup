@@ -85,7 +85,8 @@ user() {
     ln -fs .dot/bin .
 
     # Oh My Zsh
-    git clone --depth=1 'https://github.com/robbyrussell/oh-my-zsh.git'
+    git clone --depth=1 'https://github.com/robbyrussell/oh-my-zsh.git' \
+        ~nelson/.oh-my-zsh
     chsh -s /usr/bin/zsh nelson
 
     # Vim
