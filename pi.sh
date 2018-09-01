@@ -104,13 +104,11 @@ system() {
     cd /etc/shellinabox/options-enabled
     rm *.css
     cd ../options-available
-    mv '00+Black on White.css' '00_black-on-white.css'
-    mv '00_White On Black.css' '00+white-on-black.css'
-    mv '01+Color Terminal.css' '01+color-terminal.css'
-    mv '01_Monochrome.css' '01_monochrome.css'
+    mv '00+Black on White.css' '00_Black on White.css'
+    mv '00_White On Black.css' '00+White On Black.css'
     cd ../options-enabled
-    ln -s '../options-available/00+white-on-black.css' .
-    ln -s '../options-available/01+color-terminal.css' .
+    ln -s '../options-available/00+White On Black.css' .
+    ln -s '../options-available/01+Color Terminal.css' .
     systemctl restart shellinabox.service
 
     # Apache2
