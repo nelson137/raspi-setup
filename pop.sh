@@ -51,10 +51,11 @@ pkgs() {
     curl -sL https://deb.nodesource.com/setup_8.x | sudo bash -
 
     # Installations
-    sudo apt-get install -y boxes build-essential cmake compton dnsutils \
-        figlet fonts-font-awesome git golang-go html-xml-utils i3 i3blocks jq \
-        libsecret-tools lolcat nextcloud-client nmap nodejs openssh-server \
-        phantomjs pylint python3-pip python3-tk tmux upower vim vlc w3m zip zsh
+    sudo apt-get install -y boxes build-essential cmake compton convert \
+        dnsutils figlet fonts-font-awesome git golang-go html-xml-utils i3 \
+        i3blocks jq libsecret-tools lolcat nextcloud-client nmap nodejs \
+        openssh-server phantomjs pylint python3-pip python3-tk scrot tmux \
+        upower vim vlc w3m zip zsh
 
     # Install Etcher, Google Chrome, OBS, Spotify, Sublime Text, Teamviewer,
     # and Virtualbox
