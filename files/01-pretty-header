@@ -160,7 +160,7 @@ def get_info_box():
         cmd = 'echo "%s" | HOME=/ boxes -d parchment -p h2' % box_info
         return check_output(cmd, shell=True).decode(), warn
     else:
-        warn += 'Warning: could not find\n'
+        warn += 'Warning: could not find boxes\n'
         return box_info, warn
 
 
