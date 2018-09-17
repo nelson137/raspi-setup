@@ -157,7 +157,7 @@ def get_info_box():
     p = Popen(['which', 'boxes'], stdout=DEVNULL)
     p.communicate()
     if not p.returncode:
-        cmd = 'echo "%s" | HOME=~ boxes -d parchment -p h2' % box_info
+        cmd = 'echo "%s" | HOME=/ boxes -d parchment -p h2' % box_info
         return check_output(cmd, shell=True).decode(), warn
     else:
         warn += 'Warning: could not find\n'
@@ -220,7 +220,7 @@ def main():
     s = seeds[randint(0, len(seeds)-1)]
 
     # Try to colorize output
-    p = Popen(['which', 'lolcat'], stdout=DEVNULL)
+    p = Popen(['/usr/games/lolcat', '-v'], stdout=DEVNULL)
     p.communicate()
     if not p.returncode:
         with NamedTemporaryFile() as tf:
