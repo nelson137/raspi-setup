@@ -55,7 +55,8 @@ pkgs() {
         dnsutils figlet fonts-font-awesome git golang-go html-xml-utils i3 \
         i3blocks jq libnotify-bin libsecret-tools libsqlite3-dev lolcat \
         nextcloud-client nmap nodejs openssh-server phantomjs pylint \
-        python3-pip python3-tk scrot sqlite3 tmux upower vim vlc w3m zip zsh
+        python3-pip python3-tk scrot sqlite3 texlive texlive-latex-extra tmux \
+        upower vim vlc w3m zip zsh
 
     # Install Etcher, Google Chrome, OBS, Spotify, Sublime Text, Teamviewer,
     # and Virtualbox
