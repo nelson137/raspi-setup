@@ -164,15 +164,8 @@ user() {
     mkdir -p Downloads Projects
     git clone 'https://github.com/nelson137/.dot.git' ~nelson/.dot
 
-    # Config files
-    local conf_files=(
-        .zshrc .vimrc .tmux.conf .bashrc .bash_additions .bash_aliases
-        .bash_functions
-    )
-    for cf in "${conf_files[@]}"; do
-        ln -fs .dot/files/"$cf" .
-    done
-    ln -fs ~nelson/.dot/i3 ~nelson/.config/
+    # Deploy .dot setup
+    ~nelson/.dot/deploy.sh
 
     # git
     # - Copy .gitconfig to ~nelson/
